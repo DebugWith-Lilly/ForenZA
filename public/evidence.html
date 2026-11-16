@@ -1,0 +1,1110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <title>FORENZA | Evidence</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="./dashboard.css">
+</head>
+
+<body>
+<div class="texture"></div>
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <!-- FORENZA BRANDING -->
+        <div class="sidebar-brand">
+
+            <div class="sidebar-drone">
+
+                <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                    <g stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                        <path d="M49 43L25 22"/>
+                        <path d="M71 43L95 22"/>
+                        <path d="M49 57L25 78"/>
+                        <path d="M71 57L95 78"/>
+                    </g>
+
+                    <g stroke="currentColor" stroke-width="2">
+                        <ellipse cx="19" cy="16" rx="15" ry="5"/>
+                        <ellipse cx="101" cy="16" rx="15" ry="5"/>
+                        <ellipse cx="19" cy="84" rx="15" ry="5"/>
+                        <ellipse cx="101" cy="84" rx="15" ry="5"/>
+                    </g>
+
+                    <path d="M42 37L52 30H68L78 37L83 50L78 63L68 70H52L42 63L37 50Z"
+                          fill="#211B14"
+                          stroke="currentColor"
+                          stroke-width="2"/>
+
+                    <circle cx="60" cy="50" r="5"
+                            fill="#080808"
+                            stroke="currentColor"
+                            stroke-width="2"/>
+
+                </svg>
+
+            </div>
+
+            <span class="brand-name">FORENZA</span>
+
+            <span class="brand-subtitle">
+                FORENSIC INTELLIGENCE
+            </span>
+
+        </div>
+
+
+        <!-- ANIMATED FORENSIC DIVIDER -->
+
+        <div class="sidebar-divider forensic-divider"></div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-navigation">
+
+            <p class="nav-heading">WORKSPACE</p>
+
+
+            <!-- CASES -->
+
+            <a href="cases.html" class="nav-item">
+
+                <i data-lucide="folder-open" class="nav-icon"></i>
+
+                <span>Cases</span>
+
+            </a>
+
+
+            <!-- DASHBOARD -->
+
+            <a href="dashboard.html" class="nav-item">
+
+                <i data-lucide="house" class="nav-icon"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <!-- DRONE LIVE FEED -->
+
+            <a href="drone.html" class="nav-item">
+
+                <i data-lucide="drone" class="nav-icon"></i>
+
+                <span>Drone Live Feed</span>
+
+                <span class="live-indicator"
+                      title="Live drone feed"></span>
+
+            </a>
+
+
+            <!-- EVIDENCE -->
+
+            <a href="evidence.html" class="nav-item active">
+
+                <i data-lucide="file-text" class="nav-icon"></i>
+
+                <span>Evidence</span>
+
+            </a>
+
+
+            <!-- AI SUMMARY -->
+
+            <a href="processing.html" class="nav-item">
+
+                <i data-lucide="monitor" class="nav-icon"></i>
+
+                <span>AI Summary</span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- SIGN OUT -->
+
+        <div class="sidebar-footer">
+
+            <a href="#" class="logout-link">
+
+                <i data-lucide="log-out" class="nav-icon"></i>
+
+                <span>Sign out</span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="breadcrumb">
+
+                <span>FORENZA</span>
+
+                <span class="breadcrumb-divider">/</span>
+
+                <span class="current-page">Evidence</span>
+
+            </div>
+
+        </header>
+
+
+        <div class="content-wrapper">
+
+            <section class="evidence-section">
+
+                <!-- PAGE HEADING -->
+
+                <div class="evidence-heading">
+
+                    <p class="section-eyebrow">FORENSIC EVIDENCE MANAGEMENT</p>
+
+                    <h1>
+                        <span id="typing-title"></span>
+                        <span class="typing-cursor"></span>
+                    </h1>
+
+                </div>
+
+
+                <!-- DOCUMENT UPLOAD -->
+
+                <section class="evidence-upload" aria-label="Upload evidence document">
+
+                    <div class="upload-copy">
+
+                        <div class="upload-icon">
+                            <i data-lucide="file-up"></i>
+                        </div>
+
+                        <div>
+                            <h2>IMPORT EVIDENCE</h2>
+                            <p>Upload a PDF, Word document or text file to organise its contents</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="upload-actions">
+
+                        <input
+                            type="file"
+                            id="evidence-upload-input"
+                            accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+                            hidden
+                        >
+
+                        <button type="button" class="upload-button" id="evidence-upload-button">
+
+                            <i data-lucide="upload"></i>
+
+                            <span>UPLOAD DOCUMENT</span>
+
+                        </button>
+
+                        <span class="upload-formats">PDF · DOCX · TXT</span>
+
+                    </div>
+
+
+                    <div class="upload-status" id="upload-status" role="status" aria-live="polite">
+                        READY TO IMPORT
+                    </div>
+
+                </section>
+
+
+                <!-- EVIDENCE PANELS -->
+
+                <div class="evidence-grid">
+
+
+                    <!-- CASE DOCUMENT -->
+
+                    <section class="evidence-panel document-panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <div class="panel-icon">
+                                    <i data-lucide="file-pen-line"></i>
+                                </div>
+
+                                <div>
+                                    <h2>CASE DOCUMENT</h2>
+                                    <p>Written observations and case records</p>
+                                </div>
+
+                            </div>
+
+                            <span class="panel-reference">DOC 01</span>
+
+                        </div>
+
+
+                        <div class="panel-divider"></div>
+
+
+                        <div class="document-content">
+
+                            <div class="document-label">INVESTIGATION NOTES</div>
+
+                            <textarea
+                                id="case-document"
+                                class="document-textarea"
+                                placeholder="Begin documenting your investigation findings here...
+
+Record observations, evidence descriptions, relevant details and investigative notes."
+                            ></textarea>
+
+                            <div class="document-footer">
+
+                                <span>
+                                    <i data-lucide="lock"></i>
+                                    INVESTIGATOR WORKSPACE
+                                </span>
+
+                                <span id="word-count">0 WORDS</span>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- CASE IMAGES -->
+
+                    <section class="evidence-panel images-panel">
+
+                        <div class="panel-header">
+
+                            <div class="panel-title">
+
+                                <div class="panel-icon">
+                                    <i data-lucide="images"></i>
+                                </div>
+
+                                <div>
+                                    <h2>CASE IMAGES</h2>
+                                    <p>Photographic and visual evidence</p>
+                                </div>
+
+                            </div>
+
+                            <span class="panel-reference">IMG 01</span>
+
+                        </div>
+
+
+                        <div class="panel-divider"></div>
+
+
+                        <div class="image-gallery" id="image-gallery">
+
+                            <div class="image-placeholder">
+                                <i data-lucide="image"></i>
+                                <span>IMAGE 01</span>
+                            </div>
+
+                            <div class="image-placeholder">
+                                <i data-lucide="image"></i>
+                                <span>IMAGE 02</span>
+                            </div>
+
+                            <div class="image-placeholder">
+                                <i data-lucide="image"></i>
+                                <span>IMAGE 03</span>
+                            </div>
+
+                            <div class="image-placeholder">
+                                <i data-lucide="image"></i>
+                                <span>IMAGE 04</span>
+                            </div>
+
+                            <div class="image-placeholder">
+                                <i data-lucide="image"></i>
+                                <span>IMAGE 05</span>
+                            </div>
+
+                            <div class="image-placeholder">
+                                <i data-lucide="image"></i>
+                                <span>IMAGE 06</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="images-footer">
+
+                            <i data-lucide="shield-check"></i>
+
+                            <span>VISUAL EVIDENCE COLLECTION</span>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<style>
+/* FORENSIC DIVIDER */
+.forensic-divider {
+    position: relative;
+    width: 0;
+    height: 1px;
+    margin: 20px auto 25px;
+    background: linear-gradient(90deg, transparent, var(--bronze), var(--gold), var(--bronze), transparent);
+    animation: sidebarLineReveal 1.2s ease forwards 0.9s;
+}
+
+.forensic-divider::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -20%;
+    width: 20%;
+    height: 5px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    filter: blur(2px);
+    opacity: 0;
+    animation: sidebarScanLine 3s ease-in-out infinite 2.2s;
+}
+
+@keyframes sidebarLineReveal {
+    from { width: 0; opacity: 0; }
+    to { width: 180px; opacity: 1; }
+}
+
+@keyframes sidebarScanLine {
+    0% { left: -20%; opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+}
+
+/* SIDEBAR ICONS */
+.nav-icon {
+    width: 19px;
+    height: 19px;
+    stroke-width: 1.7;
+    flex-shrink: 0;
+    color: var(--bronze-light);
+    transition: color 0.25s ease;
+}
+
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon,
+.logout-link:hover .nav-icon {
+    color: var(--gold);
+}
+
+/* LIVE INDICATOR */
+.live-indicator {
+    width: 7px;
+    height: 7px;
+    min-width: 7px;
+    background: #ff3030;
+    border-radius: 2px;
+    margin-left: auto;
+    box-shadow: 0 0 6px rgba(255, 48, 48, 0.8);
+    animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 5px rgba(255, 48, 48, 0.7);
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.45;
+        box-shadow: 0 0 12px rgba(255, 48, 48, 1);
+        transform: scale(0.85);
+    }
+}
+
+/* MAIN WORKSPACE */
+.content-wrapper {
+    width: 100%;
+    max-width: 1800px;
+    min-height: calc(100vh - 76px);
+    margin: 0 auto;
+    padding: 45px 45px 35px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.evidence-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+/* PAGE HEADING */
+.evidence-heading {
+    margin-bottom: 28px;
+    flex-shrink: 0;
+}
+
+.evidence-heading .section-eyebrow {
+    margin-bottom: 12px;
+    color: var(--bronze-light);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.evidence-heading h1 {
+    display: flex;
+    align-items: center;
+    min-height: 65px;
+    color: var(--gold);
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+}
+
+/* TYPING CURSOR */
+.typing-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 48px;
+    margin-left: 8px;
+    background: var(--bronze-light);
+    animation: cursorBlink 0.8s steps(2) infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* EVIDENCE GRID */
+.evidence-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    flex: 1;
+    min-height: 520px;
+}
+
+/* EVIDENCE PANELS */
+.evidence-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    background: #000000;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4), inset 0 0 35px rgba(168,117,61,0.025);
+    transition: border-color 0.3s ease;
+}
+
+.evidence-panel:hover {
+    border-color: var(--bronze-light);
+}
+
+/* PANEL HEADER */
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 24px 25px;
+    flex-shrink: 0;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+}
+
+.panel-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(168,117,61,0.09);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--bronze-light);
+}
+
+.panel-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.6;
+}
+
+.panel-title h2 {
+    color: var(--gold);
+    font-family: "DM Mono", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    margin-bottom: 5px;
+}
+
+.panel-title p {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.panel-reference {
+    color: var(--bronze-light);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    opacity: 0.75;
+}
+
+/* PANEL DIVIDER */
+.panel-divider {
+    width: 100%;
+    height: 1px;
+    flex-shrink: 0;
+    background: var(--border-subtle);
+}
+
+/* DOCUMENT CONTENT */
+.document-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 25px;
+}
+
+.document-label {
+    margin-bottom: 15px;
+    color: var(--bronze-light);
+    font-family: "DM Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.document-textarea {
+    width: 100%;
+    flex: 1;
+    min-height: 280px;
+    resize: vertical;
+    padding: 20px;
+    background: radial-gradient(ellipse at top left, rgba(168,117,61,0.035), transparent 65%), #050505;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    outline: none;
+    color: var(--text);
+    font-family: "Manrope", sans-serif;
+    font-size: 13px;
+    line-height: 1.9;
+    transition: border-color 0.25s ease;
+}
+
+.document-textarea::placeholder {
+    color: #65533F;
+    opacity: 0.8;
+}
+
+.document-textarea:focus {
+    border-color: var(--bronze-light);
+}
+
+.document-textarea::-webkit-scrollbar,
+.image-gallery::-webkit-scrollbar {
+    width: 5px;
+}
+
+.document-textarea::-webkit-scrollbar-track,
+.image-gallery::-webkit-scrollbar-track {
+    background: #080808;
+}
+
+.document-textarea::-webkit-scrollbar-thumb,
+.image-gallery::-webkit-scrollbar-thumb {
+    background: var(--bronze-dark);
+    border-radius: 5px;
+}
+
+/* DOCUMENT FOOTER */
+.document-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 17px;
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+}
+
+.document-footer span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.document-footer svg {
+    width: 13px;
+    height: 13px;
+    color: var(--bronze-light);
+}
+
+/* IMAGE GALLERY */
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+    padding: 22px;
+    flex: 1;
+    align-content: start;
+    overflow-y: auto;
+}
+
+/* IMAGE PLACEHOLDERS */
+.image-placeholder {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    aspect-ratio: 4 / 3;
+    min-width: 0;
+    background: linear-gradient(135deg, rgba(168,117,61,0.045), transparent), #050505;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    color: var(--muted);
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.image-placeholder:hover {
+    border-color: var(--bronze-light);
+    background: linear-gradient(135deg, rgba(168,117,61,0.09), transparent), #080808;
+}
+
+.image-placeholder svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 1.2;
+    color: var(--bronze);
+    opacity: 0.8;
+}
+
+.image-placeholder span {
+    color: var(--bronze-light);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+}
+
+/* IMAGES FOOTER */
+.images-footer {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 18px 22px;
+    border-top: 1px solid var(--border-subtle);
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.images-footer svg {
+    width: 14px;
+    height: 14px;
+    color: var(--bronze-light);
+}
+
+/* DOCUMENT IMPORT CONTROL */
+.evidence-upload {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 22px;
+    padding: 17px 20px;
+    background: linear-gradient(110deg, rgba(168,117,61,0.075), rgba(0,0,0,0.92) 55%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: inset 0 0 25px rgba(168,117,61,0.025);
+}
+
+.upload-copy,
+.upload-actions {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.upload-icon {
+    width: 39px;
+    height: 39px;
+    min-width: 39px;
+    display: grid;
+    place-items: center;
+    color: var(--bronze-light);
+    background: rgba(168,117,61,0.09);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+}
+
+.upload-icon svg {
+    width: 19px;
+    height: 19px;
+}
+
+.upload-copy h2 {
+    margin: 0 0 4px;
+    color: var(--gold);
+    font: 500 11px "DM Mono", monospace;
+    letter-spacing: 1.4px;
+}
+
+.upload-copy p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.upload-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 11px 15px;
+    color: #080706;
+    background: linear-gradient(135deg, var(--gold), var(--bronze-light));
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    font: 600 10px "DM Mono", monospace;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform .2s ease, filter .2s ease;
+}
+
+.upload-button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+}
+
+.upload-button:disabled {
+    opacity: .55;
+    cursor: wait;
+    transform: none;
+}
+
+.upload-button svg {
+    width: 15px;
+    height: 15px;
+}
+
+.upload-formats,
+.upload-status {
+    color: var(--muted);
+    font: 9px "DM Mono", monospace;
+    letter-spacing: 1px;
+}
+
+.upload-status {
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.upload-status.is-error {
+    color: #d98b76;
+}
+
+.upload-status.is-success {
+    color: #9caf83;
+}
+
+/* IMPORTED IMAGE CARDS */
+.image-evidence-card {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    background: #050505;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+}
+
+.image-evidence-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: contain;
+    background: #080808;
+}
+
+.image-evidence-card span {
+    display: block;
+    overflow: hidden;
+    padding: 9px 10px;
+    color: var(--bronze-light);
+    font: 9px "DM Mono", monospace;
+    letter-spacing: .7px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* RESPONSIVE TABLET */
+@media (max-width: 1100px) {
+    .content-wrapper {
+        padding: 40px 25px 30px;
+    }
+
+    .evidence-grid {
+        gap: 18px;
+    }
+
+    .panel-header {
+        padding: 20px;
+    }
+
+    .document-content {
+        padding: 20px;
+    }
+
+    .image-gallery {
+        padding: 18px;
+        gap: 12px;
+    }
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 750px) {
+    .content-wrapper {
+        padding: 35px 18px 25px;
+    }
+
+    .evidence-heading {
+        margin-bottom: 22px;
+    }
+
+    .evidence-heading h1 {
+        font-size: 38px;
+        min-height: 45px;
+    }
+
+    .typing-cursor {
+        height: 32px;
+        width: 2px;
+    }
+
+    .evidence-grid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .evidence-panel {
+        min-height: 480px;
+    }
+
+    .document-textarea {
+        min-height: 300px;
+    }
+
+    .evidence-upload {
+        align-items: flex-start;
+    }
+
+    .upload-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .upload-status {
+        margin-top: 2px;
+    }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 400px) {
+    .panel-header {
+        padding: 16px;
+    }
+
+    .panel-title {
+        gap: 10px;
+    }
+
+    .panel-title h2 {
+        font-size: 11px;
+    }
+
+    .panel-title p {
+        font-size: 10px;
+    }
+
+    .panel-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+
+    .panel-reference {
+        font-size: 8px;
+    }
+
+    .image-gallery {
+        gap: 10px;
+        padding: 15px;
+    }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+    .live-indicator,
+    .forensic-divider,
+    .forensic-divider::after,
+    .typing-cursor {
+        animation: none !important;
+    }
+
+    .forensic-divider {
+        width: 180px;
+        opacity: 1;
+    }
+}
+</style>
+
+
+<!-- LUCIDE INITIALISATION -->
+<script>
+    lucide.createIcons();
+</script>
+
+
+<!-- TYPING EFFECT -->
+<script>
+    const title = "EVIDENCE";
+    const typingElement = document.getElementById("typing-title");
+    let characterIndex = 0;
+
+    function typeTitle() {
+        if (characterIndex < title.length) {
+            typingElement.textContent += title.charAt(characterIndex);
+            characterIndex++;
+            setTimeout(typeTitle, 120);
+        }
+    }
+
+    window.addEventListener("load", () => {
+        setTimeout(typeTitle, 500);
+    });
+</script>
+
+
+<!-- DOCUMENT WORD COUNT -->
+<script>
+    const documentInput = document.getElementById("case-document");
+    const wordCount = document.getElementById("word-count");
+
+    documentInput.addEventListener("input", () => {
+        const text = documentInput.value.trim();
+        const words = text ? text.split(/\s+/).length : 0;
+        wordCount.textContent = `${words} WORDS`;
+    });
+</script>
+
+
+<!-- FIREBASE AUTHENTICATION -->
+<script type="module">
+    import {
+        auth,
+        onAuthStateChanged,
+        signOut
+    } from "./firebase.js";
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.replace("login.html");
+        } else {
+            console.log("FORENZA: Evidence workspace authenticated.");
+        }
+    });
+
+    const logoutLink = document.querySelector(".logout-link");
+
+    if (logoutLink) {
+        logoutLink.addEventListener("click", async (event) => {
+            event.preventDefault();
+
+            try {
+                await signOut(auth);
+                window.location.replace("login.html");
+            } catch (error) {
+                console.error("FORENZA sign-out error:", error);
+                alert("Unable to sign out. Please try again.");
+            }
+        });
+    }
+</script>
+
+
+<!-- DOCUMENT PARSING LIBRARIES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="./evidence.js"></script>
+
+</body>
+</html>

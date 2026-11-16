@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+
+    <title>FORENZA | Secure Access</title>
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- LOGIN STYLESHEET -->
+    <link rel="stylesheet" href="./login.css">
+
+    <!-- FIREBASE LOGIN SCRIPT -->
+    <script type="module" src="./auth.js"></script>
+</head>
+
+<body>
+
+    <div class="texture"></div>
+    <div class="ambient-light"></div>
+    <div class="grid-overlay"></div>
+
+    <main class="login-container">
+
+        <!-- BRANDING -->
+        <header class="branding">
+
+            <div class="drone-icon">
+
+                <svg viewBox="0 0 120 100"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+
+                    <!-- DRONE ARMS -->
+                    <g stroke="currentColor"
+                       stroke-width="3"
+                       stroke-linecap="round">
+
+                        <path d="M49 43L25 22"/>
+                        <path d="M71 43L95 22"/>
+                        <path d="M49 57L25 78"/>
+                        <path d="M71 57L95 78"/>
+
+                    </g>
+
+                    <!-- PROPELLERS -->
+                    <g stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round">
+
+                        <ellipse cx="19" cy="16" rx="15" ry="5"/>
+                        <ellipse cx="101" cy="16" rx="15" ry="5"/>
+                        <ellipse cx="19" cy="84" rx="15" ry="5"/>
+                        <ellipse cx="101" cy="84" rx="15" ry="5"/>
+
+                    </g>
+
+                    <!-- MOTOR HOUSINGS -->
+                    <g fill="#24211C"
+                       stroke="currentColor"
+                       stroke-width="1.5">
+
+                        <circle cx="25" cy="22" r="5"/>
+                        <circle cx="95" cy="22" r="5"/>
+                        <circle cx="25" cy="78" r="5"/>
+                        <circle cx="95" cy="78" r="5"/>
+
+                    </g>
+
+                    <!-- MAIN DRONE BODY -->
+                    <path d="M42 37L52 30H68L78 37L83 50L78 63L68 70H52L42 63L37 50Z"
+                          fill="#24211C"
+                          stroke="currentColor"
+                          stroke-width="1.8"/>
+
+                    <!-- BODY DETAIL -->
+                    <path d="M51 39H69L75 50L69 61H51L45 50Z"
+                          fill="currentColor"
+                          opacity="0.25"
+                          stroke="currentColor"
+                          stroke-width="1"/>
+
+                    <!-- CENTRAL SENSOR -->
+                    <circle cx="60" cy="50" r="5"
+                            fill="#080808"
+                            stroke="currentColor"
+                            stroke-width="2"/>
+
+                    <!-- CAMERA MOUNT -->
+                    <path d="M55 69H65L63 77H57Z"
+                          fill="#24211C"
+                          stroke="currentColor"
+                          stroke-width="1.5"/>
+
+                    <!-- CAMERA LENS -->
+                    <circle cx="60" cy="80" r="4"
+                            fill="#080808"
+                            stroke="currentColor"
+                            stroke-width="1.5"/>
+
+                    <circle cx="60" cy="80" r="1.5"
+                            fill="currentColor"/>
+
+                </svg>
+
+            </div>
+
+            <!-- BRAND NAME -->
+            <div class="brand-name">F O R E N Z A</div>
+
+            <div class="brand-line">
+                <span></span>
+            </div>
+
+        </header>
+
+        <!-- LOGIN CARD -->
+        <section class="login-card">
+
+            <h1 id="typing-heading">
+                <span class="terminal-symbol">&gt;</span>
+                <span id="typing-text"></span><span class="cursor">_</span>
+            </h1>
+
+            <!-- LOGIN FORM -->
+            <form id="login-form">
+
+                <!-- EMAIL -->
+                <div class="input-group">
+
+                    <svg viewBox="0 0 24 24" fill="none">
+
+                        <rect x="3" y="5" width="18" height="14"
+                              rx="2"
+                              stroke="currentColor"
+                              stroke-width="1.6"/>
+
+                        <path d="M4 7L12 13L20 7"
+                              stroke="currentColor"
+                              stroke-width="1.6"/>
+
+                    </svg>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="input-group">
+
+                    <svg viewBox="0 0 24 24" fill="none">
+
+                        <rect x="5" y="10" width="14" height="11"
+                              rx="2"
+                              stroke="currentColor"
+                              stroke-width="1.6"/>
+
+                        <path d="M8 10V7A4 4 0 0116 7V10"
+                              stroke="currentColor"
+                              stroke-width="1.6"/>
+
+                    </svg>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required>
+
+                </div>
+
+                <!-- ACCESS BUTTON -->
+                <button type="submit" class="access-button">
+
+                    <span>Access work space</span>
+
+                    <svg viewBox="0 0 24 24" fill="none">
+
+                        <path d="M5 12H19M12 5L19 12L12 19"
+                              stroke="currentColor"
+                              stroke-width="1.8"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"/>
+
+                    </svg>
+
+                </button>
+
+                <!-- FIREBASE RESPONSE MESSAGE -->
+                <p id="form-message" role="status" aria-live="polite"></p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

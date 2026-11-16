@@ -1,0 +1,640 @@
+/* =====================================
+   FORENZA — PURE BLACK & BRONZE
+===================================== */
+
+:root {
+    --black: #000000;
+    --bronze: #A8753D;
+    --bronze-light: #C99B62;
+    --bronze-dark: #70451F;
+    --gold: #D7B17D;
+    --text: #DCC5A5;
+    --muted: #806B53;
+    --border: rgba(168, 117, 61, 0.48);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    background: #000000;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--text);
+    font-family: "Manrope", sans-serif;
+}
+
+/* =====================================
+   PURE BLACK BACKGROUND
+===================================== */
+
+.texture {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    background-color: #000000;
+
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 79px,
+            rgba(168, 117, 61, 0.035) 80px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 79px,
+            rgba(168, 117, 61, 0.035) 80px
+        );
+}
+
+/* Subtle grain */
+
+.texture::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: radial-gradient(
+        rgba(201, 155, 98, 0.2) 0.5px,
+        transparent 0.8px
+    );
+
+    background-size: 5px 5px;
+    opacity: 0.12;
+}
+
+/* Remove ambient lighting */
+
+.ambient-light,
+.grid-overlay {
+    display: none !important;
+}
+
+/* =====================================
+   MAIN CONTAINER
+===================================== */
+
+.login-container {
+    position: relative;
+    z-index: 2;
+
+    width: min(100% - 36px, 480px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* =====================================
+   FORENZA BRANDING
+===================================== */
+
+.branding {
+    position: relative;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 44px;
+}
+
+/* DRONE ANIMATION */
+
+        .drone-icon {
+            width: 65px;
+            height: 65px;
+            margin-bottom: 25px;
+
+            transform-origin: center;
+            will-change: transform;
+
+            animation: droneFlight 7s ease-in-out infinite;
+        }
+
+        .drone-icon svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .drone-arm {
+            stroke: var(--bronze-light);
+            stroke-width: 3;
+            stroke-linecap: round;
+            fill: none;
+        }
+
+        .drone-body {
+            fill: #080706;
+            stroke: var(--gold);
+            stroke-width: 2;
+        }
+
+        .drone-detail {
+            fill: none;
+            stroke: var(--bronze-light);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .drone-motor {
+            fill: #100D09;
+            stroke: var(--bronze);
+            stroke-width: 2;
+        }
+
+        .drone-propeller {
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 2;
+            opacity: 0.8;
+        }
+
+        .drone-camera {
+            fill: #100D09;
+            stroke: var(--bronze-light);
+            stroke-width: 2;
+        }
+
+        .drone-lens {
+            fill: #000000;
+            stroke: var(--gold);
+            stroke-width: 1.5;
+        }
+
+        @keyframes droneFlight {
+
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            12% {
+                transform: translate(20px, -9px) rotate(8deg);
+            }
+
+            25% {
+                transform: translate(32px, 2px) rotate(12deg);
+            }
+
+            38% {
+                transform: translate(17px, 12px) rotate(5deg);
+            }
+
+            50% {
+                transform: translate(0, 15px) rotate(0deg);
+            }
+
+            62% {
+                transform: translate(-17px, 12px) rotate(-5deg);
+            }
+
+            75% {
+                transform: translate(-32px, 1px) rotate(-12deg);
+            }
+
+            88% {
+                transform: translate(-17px, -8px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+        }
+
+
+/* =====================================
+   BRAND NAME
+===================================== */
+
+.brand-name {
+    font-size: clamp(27px, 6vw, 36px);
+    font-weight: 600;
+
+    letter-spacing: 7px;
+
+    color: var(--gold);
+    text-shadow: none;
+}
+
+/* =====================================
+   ANIMATED BRONZE SCANNING LINE
+===================================== */
+
+.brand-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 180px;
+    height: 5px;
+
+    margin-top: 17px;
+    overflow: hidden;
+}
+
+/* Main line */
+
+.brand-line span {
+    position: relative;
+    display: block;
+
+    width: 0;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--bronze),
+        var(--gold),
+        var(--bronze),
+        transparent
+    );
+
+    animation: brandLineReveal 1.2s ease forwards 0.9s;
+}
+
+/* Moving scanning light */
+
+.brand-line span::after {
+    content: "";
+
+    position: absolute;
+    top: -2px;
+    left: -20%;
+
+    width: 20%;
+    height: 5px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--gold),
+        transparent
+    );
+
+    filter: blur(2px);
+    opacity: 0;
+
+    animation: brandScan 3s ease-in-out infinite 2.2s;
+}
+
+/* Line draws itself */
+
+@keyframes brandLineReveal {
+
+    from {
+        width: 0;
+        opacity: 0;
+    }
+
+    to {
+        width: 100%;
+        opacity: 1;
+    }
+}
+
+/* Scanning animation */
+
+@keyframes brandScan {
+
+    0% {
+        left: -20%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+/* =====================================
+   LOGIN CARD
+===================================== */
+
+.login-card {
+    width: 100%;
+
+    padding: 38px 35px;
+
+    background: #000000;
+
+    border: 1px solid var(--bronze);
+    border-radius: 7px;
+
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+/* =====================================
+   TYPING TEXT
+===================================== */
+
+.login-card h1 {
+    min-height: 39px;
+
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 30px;
+
+    font-family: "DM Mono", monospace;
+    font-size: 21px;
+    font-weight: 400;
+
+    color: var(--gold);
+}
+
+.terminal-symbol {
+    margin-right: 10px;
+    color: var(--bronze);
+}
+
+.cursor {
+    margin-left: 2px;
+    color: var(--gold);
+
+    animation: blink 0.8s steps(2, start) infinite;
+}
+
+@keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
+
+/* =====================================
+   LOGIN FORM
+===================================== */
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* =====================================
+   INPUT FIELDS
+===================================== */
+
+.input-group {
+    height: 59px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 0 17px;
+
+    background: #000000 !important;
+
+    border: 1px solid var(--border);
+    border-radius: 5px;
+
+    transition: border-color 0.25s ease;
+}
+
+.input-group:focus-within {
+    border-color: var(--gold) !important;
+    box-shadow: none;
+}
+
+.input-group > svg {
+    width: 21px;
+    height: 21px;
+
+    flex-shrink: 0;
+
+    color: var(--bronze-light);
+}
+
+.input-group input {
+    width: 100%;
+    height: 100%;
+
+    outline: none;
+    border: none;
+
+    background: #000000 !important;
+
+    color: var(--gold) !important;
+    caret-color: var(--gold);
+
+    font-size: 14px;
+    font-family: "Manrope", sans-serif;
+
+    color-scheme: dark;
+}
+
+.input-group input::placeholder {
+    color: var(--muted);
+    opacity: 1;
+}
+
+/* Password visibility button */
+
+.input-group button {
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+
+    color: var(--bronze-light);
+
+    display: grid;
+    place-items: center;
+}
+
+.input-group button:hover {
+    color: var(--gold);
+}
+
+.input-group button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* =====================================
+   CHROME AUTOFILL FIX
+===================================== */
+
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus,
+.input-group input:-webkit-autofill:active {
+
+    -webkit-text-fill-color: #D7B17D !important;
+
+    -webkit-box-shadow:
+        0 0 0 1000px #000000 inset !important;
+
+    box-shadow:
+        0 0 0 1000px #000000 inset !important;
+
+    background-color: #000000 !important;
+    background-image: none !important;
+
+    caret-color: #D7B17D !important;
+
+    transition: background-color 999999s ease-in-out 0s;
+}
+
+/* =====================================
+   ACCESS WORKSPACE BUTTON
+===================================== */
+
+.access-button {
+    width: 100%;
+    height: 58px;
+
+    margin-top: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    border: 1px solid var(--bronze-light);
+    border-radius: 5px;
+
+    background: linear-gradient(
+        110deg,
+        #95632F,
+        #BD9259,
+        #95632F
+    );
+
+    color: #000000;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+}
+
+.access-button svg {
+    width: 19px;
+    height: 19px;
+
+    transition: transform 0.25s ease;
+}
+
+.access-button:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+}
+
+.access-button:hover svg {
+    transform: translateX(5px);
+}
+
+.access-button:active {
+    transform: scale(0.99);
+}
+
+/* =====================================
+   FIREBASE RESPONSE MESSAGE
+===================================== */
+
+#form-message {
+    display: none;
+
+    color: var(--gold);
+
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+#form-message.visible {
+    display: block;
+}
+
+/* =====================================
+   MOBILE RESPONSIVENESS
+===================================== */
+
+@media (max-width: 500px) {
+
+    .login-container {
+        width: calc(100% - 36px);
+    }
+
+    .branding {
+        margin-bottom: 35px;
+    }
+
+    .drone-icon {
+        width: 55px;
+        height: 55px;
+        margin-bottom: 20px;
+    }
+
+    .brand-name {
+        letter-spacing: 4px;
+    }
+
+    .login-card {
+        padding: 30px 22px;
+    }
+
+    .login-card h1 {
+        font-size: 19px;
+    }
+}
+
+/* =====================================
+   ACCESSIBILITY
+===================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .drone-icon {
+        transform: none;
+    }
+
+    .brand-line span {
+        width: 100%;
+        opacity: 1;
+    }
+
+    .brand-line span::after {
+        display: none;
+    }
+}

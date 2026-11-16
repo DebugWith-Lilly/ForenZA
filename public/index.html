@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+
+    <title>FORENZA | Forensic Intelligence</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        :root {
+            --black: #000000;
+            --bronze: #A8753D;
+            --bronze-light: #C99B62;
+            --gold: #D7B17D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--black);
+            font-family: 'Manrope', sans-serif;
+            color: var(--gold);
+            overflow: hidden;
+        }
+
+        /* BACKGROUND */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(168, 117, 61, 0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(168, 117, 61, 0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 55px 55px;
+        }
+
+        /* MAIN */
+
+        .welcome-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 25px;
+            text-align: center;
+        }
+
+        /* DRONE ANIMATION */
+
+        .drone-icon {
+            width: 65px;
+            height: 65px;
+            margin-bottom: 25px;
+
+            transform-origin: center;
+            will-change: transform;
+
+            animation: droneFlight 7s ease-in-out infinite;
+        }
+
+        .drone-icon svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .drone-arm {
+            stroke: var(--bronze-light);
+            stroke-width: 3;
+            stroke-linecap: round;
+            fill: none;
+        }
+
+        .drone-body {
+            fill: #080706;
+            stroke: var(--gold);
+            stroke-width: 2;
+        }
+
+        .drone-detail {
+            fill: none;
+            stroke: var(--bronze-light);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .drone-motor {
+            fill: #100D09;
+            stroke: var(--bronze);
+            stroke-width: 2;
+        }
+
+        .drone-propeller {
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 2;
+            opacity: 0.8;
+        }
+
+        .drone-camera {
+            fill: #100D09;
+            stroke: var(--bronze-light);
+            stroke-width: 2;
+        }
+
+        .drone-lens {
+            fill: #000000;
+            stroke: var(--gold);
+            stroke-width: 1.5;
+        }
+
+        @keyframes droneFlight {
+
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            12% {
+                transform: translate(20px, -9px) rotate(8deg);
+            }
+
+            25% {
+                transform: translate(32px, 2px) rotate(12deg);
+            }
+
+            38% {
+                transform: translate(17px, 12px) rotate(5deg);
+            }
+
+            50% {
+                transform: translate(0, 15px) rotate(0deg);
+            }
+
+            62% {
+                transform: translate(-17px, 12px) rotate(-5deg);
+            }
+
+            75% {
+                transform: translate(-32px, 1px) rotate(-12deg);
+            }
+
+            88% {
+                transform: translate(-17px, -8px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+        }
+
+        /* FORENZA LOGO */
+
+        .brand-name {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--gold);
+            font-size: clamp(48px, 10vw, 88px);
+            font-weight: 800;
+            letter-spacing: 9px;
+            line-height: 1;
+        }
+
+        .brand-letter {
+            display: inline-block;
+            animation: reveal 0.8s ease both;
+        }
+
+        .brand-letter:nth-child(1) { animation-delay: 0.1s; }
+        .brand-letter:nth-child(2) { animation-delay: 0.2s; }
+        .brand-letter:nth-child(4) { animation-delay: 0.4s; }
+        .brand-letter:nth-child(5) { animation-delay: 0.5s; }
+        .brand-letter:nth-child(6) { animation-delay: 0.6s; }
+        .brand-letter:nth-child(7) { animation-delay: 0.7s; }
+
+        /* MAGNIFYING GLASS — REPLACES O */
+
+        .magnifier {
+            width: 0.85em;
+            height: 0.95em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 1px;
+
+            animation: reveal 0.8s ease both 0.3s;
+        }
+
+        .magnifier svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        .lens {
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 3.5;
+        }
+
+        .handle {
+            fill: none;
+            stroke: var(--bronze-light);
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        /* SLOGAN */
+
+        .slogan {
+            margin-top: 32px;
+
+            color: var(--bronze-light);
+            font-family: 'DM Mono', monospace;
+            font-size: clamp(9px, 2vw, 12px);
+            letter-spacing: 2px;
+
+            animation: reveal 1s ease both 0.8s;
+        }
+
+        /* ANIMATED FORENSIC DIVIDER */
+
+        .divider {
+            position: relative;
+            width: 0;
+            height: 1px;
+            margin: 40px auto;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                var(--bronze),
+                var(--gold),
+                var(--bronze),
+                transparent
+            );
+
+            animation: lineReveal 1.2s ease forwards 0.9s;
+        }
+
+        /* MOVING SCANNING LIGHT */
+
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -20%;
+            width: 20%;
+            height: 5px;
+
+            background: linear-gradient(
+                90deg,
+                transparent,
+                var(--gold),
+                transparent
+            );
+
+            filter: blur(2px);
+            opacity: 0;
+
+            animation: scanLine 3s ease-in-out infinite 2.2s;
+        }
+
+        /* LINE REVEAL */
+
+        @keyframes lineReveal {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+
+            to {
+                width: 180px;
+                opacity: 1;
+            }
+        }
+
+        /* SCANNING ANIMATION */
+
+        @keyframes scanLine {
+            0% {
+                left: -20%;
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 1;
+            }
+
+            85% {
+                opacity: 1;
+            }
+
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* ENTER BUTTON */
+
+        .enter-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+
+            min-width: 225px;
+            padding: 17px 25px;
+
+            border: 1px solid var(--bronze);
+            background: transparent;
+
+            color: var(--gold);
+            text-decoration: none;
+
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+
+            transition: all 0.3s ease;
+            animation: reveal 1s ease both 1.2s;
+        }
+
+        .enter-button:hover {
+            background: var(--bronze);
+            color: #000000;
+            border-color: var(--gold);
+        }
+
+        .enter-button span {
+            font-size: 17px;
+            transition: transform 0.3s ease;
+        }
+
+        .enter-button:hover span {
+            transform: translateX(5px);
+        }
+
+        /* GENERAL REVEAL ANIMATION */
+
+        @keyframes reveal {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* FOOTER */
+
+        .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 40px;
+            right: 40px;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: #66513A;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 600px) {
+
+            .brand-name {
+                letter-spacing: 4px;
+            }
+
+            .drone-icon {
+                width: 55px;
+                height: 55px;
+                margin-bottom: 20px;
+            }
+
+            .slogan {
+                letter-spacing: 1px;
+            }
+
+            .footer {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+                font-size: 8px;
+            }
+        }
+
+        /* REDUCED MOTION ACCESSIBILITY */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+
+            .drone-icon {
+                transform: none;
+            }
+
+            .divider {
+                width: 180px;
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="background"></div>
+
+    <main class="welcome-container">
+
+        <!-- ANIMATED FORENSIC DRONE -->
+
+        <div class="drone-icon">
+
+            <svg viewBox="0 0 120 100" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <!-- DRONE ARMS -->
+
+                <path class="drone-arm"
+                      d="M49 43 L25 22
+                         M71 43 L95 22
+                         M49 57 L25 78
+                         M71 57 L95 78"/>
+
+                <!-- ROTOR MOTORS -->
+
+                <circle class="drone-motor" cx="25" cy="22" r="8"/>
+                <circle class="drone-motor" cx="95" cy="22" r="8"/>
+                <circle class="drone-motor" cx="25" cy="78" r="8"/>
+                <circle class="drone-motor" cx="95" cy="78" r="8"/>
+
+                <!-- PROPELLERS -->
+
+                <ellipse class="drone-propeller"
+                         cx="25" cy="22" rx="19" ry="4"/>
+
+                <ellipse class="drone-propeller"
+                         cx="95" cy="22" rx="19" ry="4"/>
+
+                <ellipse class="drone-propeller"
+                         cx="25" cy="78" rx="19" ry="4"/>
+
+                <ellipse class="drone-propeller"
+                         cx="95" cy="78" rx="19" ry="4"/>
+
+                <!-- CENTRAL DRONE BODY -->
+
+                <path class="drone-body"
+                      d="M43 39
+                         L53 34
+                         L67 34
+                         L77 39
+                         L81 50
+                         L77 61
+                         L67 66
+                         L53 66
+                         L43 61
+                         L39 50
+                         Z"/>
+
+                <!-- BODY DETAILS -->
+
+                <path class="drone-detail"
+                      d="M50 43 L70 43
+                         M50 57 L70 57"/>
+
+                <path class="drone-detail"
+                      d="M60 36 L60 64"/>
+
+                <circle cx="60" cy="50" r="4"
+                        fill="#A8753D"/>
+
+                <!-- CAMERA MOUNT -->
+
+                <path class="drone-detail"
+                      d="M55 66 L55 72
+                         L65 72 L65 66"/>
+
+                <!-- CAMERA -->
+
+                <rect class="drone-camera"
+                      x="49" y="71"
+                      width="22" height="14"
+                      rx="4"/>
+
+                <!-- CAMERA LENS -->
+
+                <circle class="drone-lens"
+                        cx="60" cy="78" r="5"/>
+
+                <circle cx="60" cy="78" r="2"
+                        fill="#C99B62"/>
+
+            </svg>
+
+        </div>
+
+        <!-- FORENZA WORDMARK -->
+
+        <h1 class="brand-name">
+
+            <span class="brand-letter">F</span>
+
+            <!-- MAGNIFYING GLASS IN PLACE OF O -->
+
+            <span class="magnifier">
+
+                <svg viewBox="0 0 60 75" fill="none">
+
+                    <circle
+                        class="lens"
+                        cx="25"
+                        cy="26"
+                        r="17"
+                    />
+
+                    <path
+                        class="handle"
+                        d="M37 39L53 56"
+                    />
+
+                </svg>
+
+            </span>
+
+            <span class="brand-letter">R</span>
+            <span class="brand-letter">E</span>
+            <span class="brand-letter">N</span>
+            <span class="brand-letter">Z</span>
+            <span class="brand-letter">A</span>
+
+        </h1>
+
+        <!-- DRONE SLOGAN -->
+
+        <p class="slogan">
+            EYES IN THE SKY. PRECISION ON THE GROUND.
+        </p>
+
+        <!-- ANIMATED SCANNING LINE -->
+
+        <div class="divider"></div>
+
+        <!-- ENTER WORKSPACE -->
+
+        <a href="login.html" class="enter-button">
+
+            ENTER WORKSPACE
+
+            <span>→</span>
+
+        </a>
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+
+            <span>FORENZA © 2026</span>
+
+            <span>DOCUMENT. ANALYSE. SOLVE.</span>
+
+        </footer>
+
+    </main>
+
+</body>
+
+</html>
