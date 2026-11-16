@@ -1,3 +1,5 @@
+
+
 # ✦ FORENZA
 
 ### *Forensic Intelligence & Evidence Management System*
@@ -30,18 +32,20 @@ The platform brings together several interconnected capabilities:
 
 ---
 
-## ✧ Our Mission
+## ✧ Technology Stack
 
-We envision a future where forensic investigators can work with digital evidence more efficiently through connected surveillance, intelligent processing, and structured evidence management.
-
-ForenZA aims to simplify the journey from raw visual data to organised forensic intelligence, supporting investigators with tools that prioritise **efficiency, organisation, accessibility, and informed investigation.**
-
----
-
-## ⚙ Technology Stack
-
-\<p align="left">   \<img src="[https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white](https://img.shields.io/badge/HTML5-E34F26?style=flat-square\&logo=html5\&logoColor=white)" />   \<img src="[https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white](https://img.shields.io/badge/CSS3-1572B6?style=flat-square\&logo=css3\&logoColor=white)" />   \<img src="[https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square\&logo=javascript\&logoColor=black)" />   \<img src="[https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square\&logo=firebase\&logoColor=black)" /> \</p>
+| Technology | Purpose |
+|:---|:---|
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" width="18"/> **HTML5** | Web page structure |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" width="18"/> **CSS3** | Interface styling and layout |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" width="18"/> **JavaScript** | Application functionality and interactivity |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" width="18"/> **Firebase** | Backend services and data management |
 
 ---
 
-\<p align="center">   \<strong>✦ FORENZA ✦\</strong>\<br>   \<em>Investigate. Analyse. Organise.\</em>\<br>\<br>   \<strong>Forensic Intelligence & Evidence Management\</strong> \</p>
+<p align="center">
+  <strong>✦ FORENZA ✦</strong><br>
+  <em>Investigate. Analyse. Organise.</em><br><br>
+  <strong>Forensic Intelligence & Evidence Management</strong>
+</p>
+
