@@ -1,8 +1,14 @@
 
 
-# <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/fingerprint.svg" width="28" height="28" /> FORENZA
+<div align="center">
 
-### *Forensic Intelligence & Evidence Management System*
+# <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/fingerprint.svg" width="30" height="30" /> FORENZA
+
+### Forensic Intelligence & Evidence Management System
+
+**<span style="color:#C99B62">Investigate.</span> <span style="color:#D7B17D">Analyse.</span> <span style="color:#A8753D">Organise.</span>**
+
+</div>
 
 ---
 
@@ -18,7 +24,7 @@ There is a need for an integrated solution that connects drone-assisted surveill
 
 ## <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/radar.svg" width="20" height="20" /> Our Solution — ForenZA
 
-### *From Aerial Surveillance to Forensic Intelligence.*
+### From Aerial Surveillance to Forensic Intelligence.
 
 ForenZA is a drone-assisted forensic intelligence platform designed to help investigators capture, process, and organise digital evidence.
 
@@ -35,9 +41,21 @@ The platform brings together five key capabilities:
 ## <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg" width="20" height="20" /> Technology Stack
 
 <p align="left">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
-  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
+  <img src="https://img.shields.io/badge/HTML5-0D0B09?style=for-the-badge&logo=html5&logoColor=C99B62&labelColor=0D0B09" />
+  <img src="https://img.shields.io/badge/CSS3-0D0B09?style=for-the-badge&logo=css3&logoColor=C99B62&labelColor=0D0B09" />
+  <img src="https://img.shields.io/badge/JavaScript-0D0B09?style=for-the-badge&logo=javascript&logoColor=D7B17D&labelColor=0D0B09" />
+  <img src="https://img.shields.io/badge/Firebase-0D0B09?style=for-the-badge&logo=firebase&logoColor=C99B62&labelColor=0D0B09" />
 </p>
+
+---
+
+<div align="center">
+
+<img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/fingerprint.svg" width="22" height="22" />
+
+**FORENZA**
+
+<sub>Forensic Intelligence & Evidence Management</sub>
+
+</div>
 
