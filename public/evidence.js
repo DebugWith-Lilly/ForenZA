@@ -1,415 +1,690 @@
-/* =========================================================
-   FORENZA — EVIDENCE DOCUMENT IMPORT
 
-   PDF:
-   - Extracts written text.
-   - Creates a visual preview of each PDF page.
+const TRANSCRIPTION_SERVER = "http://localhost:3000/api/transcribe";
+const FRAME_INTERVAL = 5;
+const MAX_IMAGE_SLOTS = 6;
 
-   DOCX:
-   - Extracts written text.
-   - Extracts embedded images separately.
+// ==========================================
+// FORENZA EVIDENCE MANAGEMENT
+// ==========================================
 
-   TXT:
-   - Extracts written content.
-========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
 
-(() => {
-    "use strict";
-
-    const uploadInput = document.getElementById("evidence-upload-input");
     const uploadButton = document.getElementById("evidence-upload-button");
+    const uploadInput = document.getElementById("evidence-upload-input");
     const uploadStatus = document.getElementById("upload-status");
-    const documentArea = document.getElementById("case-document");
+    const caseDocument = document.getElementById("case-document");
+    const wordCount = document.getElementById("word-count");
     const imageGallery = document.getElementById("image-gallery");
 
-    if (
-        !uploadInput ||
-        !uploadButton ||
-        !uploadStatus ||
-        !documentArea ||
-        !imageGallery
-    ) {
-        console.error("FORENZA: Evidence upload elements could not be found.");
+    if (!uploadButton || !uploadInput || !imageGallery) {
+        console.error("FORENZA: Required evidence elements not found.");
         return;
     }
 
-    const createdImageUrls = [];
+    // Select the six original placeholders.
+    const imageSlots = Array.from(
+        imageGallery.querySelectorAll(".image-placeholder")
+    ).slice(0, MAX_IMAGE_SLOTS);
 
-    // Open the file selector when the upload button is clicked.
+    let nextImageSlot = 0;
+    let overflowImageCount = 0;
+
+    // ==========================================
+    // UPLOAD BUTTON
+    // ==========================================
+
     uploadButton.addEventListener("click", () => {
         uploadInput.click();
     });
 
-    // Process the selected document.
-    uploadInput.addEventListener("change", async () => {
+    uploadInput.addEventListener("change", async (event) => {
 
-        const file = uploadInput.files && uploadInput.files[0];
+        const file = event.target.files[0];
 
         if (!file) return;
 
-        setBusy(true);
-        setStatus(`IMPORTING ${file.name.toUpperCase()}...`);
+        uploadButton.disabled = true;
+        overflowImageCount = 0;
 
         try {
 
-            const extension = file.name
-                .split(".")
-                .pop()
-                .toLowerCase();
+            setStatus("PROCESSING EVIDENCE...");
 
-            let extractedText = "";
-            let extractedImages = [];
+            const extension = file.name.split(".").pop().toLowerCase();
 
-            // PDF DOCUMENT
-            if (extension === "pdf") {
+            switch (extension) {
 
-                ({
-                    text: extractedText,
-                    images: extractedImages
-                } = await readPdf(file));
+                case "pdf":
+                    await processPDF(file);
+                    break;
 
-            }
+                case "docx":
+                    await processDOCX(file);
+                    break;
 
-            // WORD DOCUMENT
-            else if (extension === "docx") {
+                case "txt":
+                    await processTXT(file);
+                    break;
 
-                ({
-                    text: extractedText,
-                    images: extractedImages
-                } = await readDocx(file));
+                case "mp4":
+                case "mov":
+                case "webm":
+                    await processVideo(file);
+                    break;
 
-            }
-
-            // TEXT DOCUMENT
-            else if (extension === "txt") {
-
-                extractedText = await file.text();
+                default:
+                    throw new Error("Unsupported file format.");
 
             }
 
-            else {
+            if (overflowImageCount > 0) {
 
-                throw new Error(
-                    "Unsupported file type. Please choose a PDF, DOCX or TXT file."
+                setStatus(
+                    `IMPORT COMPLETE. ${overflowImageCount} ADDITIONAL IMAGE(S) DID NOT FIT INTO THE SIX SLOTS.`
                 );
 
-            }
+            } else {
 
-            // Check whether anything was extracted.
-            if (!extractedText.trim() && extractedImages.length === 0) {
-
-                throw new Error(
-                    "No readable text or images were found in this document."
-                );
+                setStatus("EVIDENCE IMPORTED SUCCESSFULLY.");
 
             }
-
-            // ADD WRITTEN CONTENT TO CASE DOCUMENT.
-            if (extractedText.trim()) {
-
-                const heading =
-                    `\n\n========== IMPORTED DOCUMENT: ${file.name} ==========\n\n`;
-
-                documentArea.value = documentArea.value.trim()
-                    ? `${documentArea.value.trim()}${heading}${extractedText.trim()}`
-                    : `${file.name}\n${"-".repeat(Math.min(file.name.length, 60))}\n\n${extractedText.trim()}`;
-
-                // Update the word counter.
-                documentArea.dispatchEvent(
-                    new Event("input", { bubbles: true })
-                );
-
-            }
-
-            // ADD EXTRACTED IMAGES TO THE IMAGE GALLERY.
-            if (extractedImages.length) {
-
-                addImages(extractedImages);
-
-            }
-
-            const imageCount = extractedImages.length;
-
-            const importedWords = extractedText.trim()
-                ? extractedText.trim().split(/\s+/).length
-                : 0;
-
-            setStatus(
-                `IMPORT COMPLETE · ${importedWords} WORDS · ${imageCount} IMAGE${imageCount === 1 ? "" : "S"} ADDED`,
-                "success"
-            );
 
         } catch (error) {
 
-            console.error("FORENZA document import error:", error);
+            console.error("FORENZA evidence error:", error);
 
-            setStatus(
-                error.message || "Unable to import this document.",
-                "error"
-            );
+            setStatus("IMPORT FAILED: " + error.message, "error");
 
         } finally {
 
-            setBusy(false);
-
-            // Allow the same file to be selected again.
+            uploadButton.disabled = false;
             uploadInput.value = "";
+            updateWordCount();
 
         }
 
     });
 
+    // ==========================================
+    // STATUS
+    // ==========================================
 
-    /* =====================================================
-       PDF READER
-    ===================================================== */
+    function setStatus(message, type = "") {
 
-    async function readPdf(file) {
+        if (!uploadStatus) return;
 
-        if (!window.pdfjsLib) {
+        uploadStatus.textContent = message;
 
-            throw new Error(
-                "PDF reader could not load. Check your internet connection and refresh the page."
+        uploadStatus.classList.remove("is-error", "is-success");
+
+        if (type) {
+            uploadStatus.classList.add(`is-${type}`);
+        }
+
+    }
+
+    // ==========================================
+    // DOCUMENT TEXT
+    // ==========================================
+
+    function appendToDocument(text) {
+
+        if (!caseDocument || !text.trim()) return;
+
+        const existingText = caseDocument.value.trim();
+
+        caseDocument.value = existingText
+            ? existingText + "\n\n" + text
+            : text;
+
+        updateWordCount();
+
+    }
+
+    function updateWordCount() {
+
+        if (!caseDocument || !wordCount) return;
+
+        const text = caseDocument.value.trim();
+
+        const words = text
+            ? text.split(/\s+/).length
+            : 0;
+
+        wordCount.textContent = `${words} WORDS`;
+
+    }
+
+    // ==========================================
+    // IMAGE DISPLAY
+    // USE EXISTING PLACEHOLDERS ONLY
+    // ==========================================
+
+    function addImageToGallery(src, caption) {
+
+        if (nextImageSlot >= imageSlots.length) {
+
+            overflowImageCount++;
+
+            console.warn(
+                "FORENZA: All six image placeholders are occupied.",
+                caption
             );
+
+            return false;
 
         }
 
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        const slot = imageSlots[nextImageSlot];
+
+        nextImageSlot++;
+
+        // Remove the original icon and placeholder text.
+        slot.replaceChildren();
+
+        const image = document.createElement("img");
+
+        image.src = src;
+        image.alt = caption;
+        image.className = "evidence-slot-image";
+
+        const label = document.createElement("span");
+
+        label.className = "evidence-slot-caption";
+        label.textContent = caption;
+        label.title = caption;
+
+        slot.appendChild(image);
+        slot.appendChild(label);
+
+        slot.setAttribute("aria-label", caption);
+
+        return true;
+
+    }
+
+    // ==========================================
+    // PDF PROCESSING
+    // ==========================================
+
+    async function processPDF(file) {
+
+        if (!window.pdfjsLib) {
+            throw new Error("PDF.js is missing. Check the HTML imports.");
+        }
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
             "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
         const buffer = await file.arrayBuffer();
 
-        const pdf = await window.pdfjsLib.getDocument({
-            data: new Uint8Array(buffer)
+        const pdf = await pdfjsLib.getDocument({
+            data: buffer
         }).promise;
 
-        const textParts = [];
-        const images = [];
+        let extractedText = "";
 
-        // Process every PDF page.
-        for (
-            let pageNumber = 1;
-            pageNumber <= pdf.numPages;
-            pageNumber++
-        ) {
+        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
 
             setStatus(
-                `READING PDF PAGE ${pageNumber} OF ${pdf.numPages}...`
+                `PROCESSING PDF PAGE ${pageNumber}/${pdf.numPages}`
             );
 
             const page = await pdf.getPage(pageNumber);
 
-            // Extract text from the current page.
             const textContent = await page.getTextContent();
 
             const pageText = textContent.items
                 .map(item => item.str)
-                .join(" ")
-                .replace(/\s+/g, " ")
-                .trim();
+                .join(" ");
 
-            if (pageText) {
+            extractedText +=
+                `\n--- PDF PAGE ${pageNumber} ---\n${pageText}\n`;
 
-                textParts.push(
-                    `PAGE ${pageNumber}\n${pageText}`
-                );
-
-            }
-
-            // Render the PDF page as a visual evidence preview.
+            // Render the complete PDF page as an image.
             const viewport = page.getViewport({
-                scale: 1.35
+                scale: 1.5
             });
 
             const canvas = document.createElement("canvas");
 
-            const context = canvas.getContext("2d", {
-                alpha: false
-            });
+            const context = canvas.getContext("2d");
 
-            canvas.width = Math.ceil(viewport.width);
-            canvas.height = Math.ceil(viewport.height);
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
 
             await page.render({
                 canvasContext: context,
                 viewport
             }).promise;
 
-            const blob = await new Promise(resolve => {
-
-                canvas.toBlob(
-                    resolve,
-                    "image/jpeg",
-                    0.88
-                );
-
-            });
-
-            if (blob) {
-
-                images.push({
-                    blob,
-                    name: `${file.name} — PAGE ${String(pageNumber).padStart(2, "0")}`
-                });
-
-            }
-
-            // Release the canvas memory.
-            canvas.width = 0;
-            canvas.height = 0;
-
-        }
-
-        return {
-            text: textParts.join("\n\n"),
-            images
-        };
-
-    }
-
-
-    /* =====================================================
-       WORD DOCUMENT READER
-    ===================================================== */
-
-    async function readDocx(file) {
-
-        if (!window.mammoth || !window.JSZip) {
-
-            throw new Error(
-                "Word document reader could not load. Check your internet connection and refresh the page."
+            addImageToGallery(
+                canvas.toDataURL("image/jpeg", 0.85),
+                `${file.name} - PAGE ${pageNumber}`
             );
 
         }
 
+        appendToDocument(
+            `IMPORTED PDF: ${file.name}\n${extractedText}`
+        );
+
+    }
+
+    // ==========================================
+    // DOCX PROCESSING
+    // ==========================================
+
+    async function processDOCX(file) {
+
+        if (!window.mammoth || !window.JSZip) {
+            throw new Error("Mammoth or JSZip is missing.");
+        }
+
         const buffer = await file.arrayBuffer();
 
-        // Extract written content.
-        const result = await window.mammoth.extractRawText({
+        const result = await mammoth.extractRawText({
             arrayBuffer: buffer
         });
 
-        // Open the DOCX archive to locate embedded images.
-        const zip = await window.JSZip.loadAsync(buffer);
-
-        const mediaFiles = Object.keys(zip.files).filter(path =>
-
-            path.startsWith("word/media/") &&
-            !zip.files[path].dir &&
-            /\.(png|jpe?g|gif|webp|bmp|tiff?)$/i.test(path)
-
+        appendToDocument(
+            `IMPORTED WORD DOCUMENT: ${file.name}\n${result.value}`
         );
 
-        const images = [];
+        // Extract embedded Word images.
+        const zip = await JSZip.loadAsync(buffer);
 
-        // Extract each embedded image.
-        for (const path of mediaFiles) {
+        const mediaFiles = Object.keys(zip.files).filter(name =>
+            name.startsWith("word/media/") &&
+            !zip.files[name].dir
+        );
 
-            const blob = await zip.files[path].async("blob");
+        for (const mediaFile of mediaFiles) {
 
-            images.push({
-                blob,
-                name: path.split("/").pop()
-            });
+            const blob = await zip.files[mediaFile].async("blob");
+
+            const imageURL = URL.createObjectURL(blob);
+
+            addImageToGallery(
+                imageURL,
+                `${file.name} - ${mediaFile.split("/").pop()}`
+            );
 
         }
 
-        return {
-            text: result.value || "",
-            images
+    }
+
+    // ==========================================
+    // TXT PROCESSING
+    // ==========================================
+
+    async function processTXT(file) {
+
+        const text = await file.text();
+
+        appendToDocument(
+            `IMPORTED TEXT FILE: ${file.name}\n${text}`
+        );
+
+    }
+
+    // ==========================================
+    // VIDEO HELPERS
+    // ==========================================
+
+    function waitForEvent(element, eventName) {
+
+        return new Promise((resolve, reject) => {
+
+            const onSuccess = () => {
+                cleanup();
+                resolve();
+            };
+
+            const onError = () => {
+                cleanup();
+                reject(
+                    new Error("The video could not be loaded or played.")
+                );
+            };
+
+            const cleanup = () => {
+                element.removeEventListener(eventName, onSuccess);
+                element.removeEventListener("error", onError);
+            };
+
+            element.addEventListener(eventName, onSuccess, {
+                once: true
+            });
+
+            element.addEventListener("error", onError, {
+                once: true
+            });
+
+        });
+
+    }
+
+    async function seekVideo(video, time) {
+
+        if (Math.abs(video.currentTime - time) < 0.05) {
+            return;
+        }
+
+        const seekPromise = waitForEvent(video, "seeked");
+
+        video.currentTime = time;
+
+        await seekPromise;
+
+    }
+
+    function formatTimestamp(seconds) {
+
+        const minutes = Math.floor(seconds / 60);
+
+        const remainingSeconds = Math.floor(seconds % 60);
+
+        return (
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(remainingSeconds).padStart(2, "0")
+        );
+
+    }
+
+    // ==========================================
+    // VIDEO FRAME EXTRACTION
+    // ==========================================
+
+    async function extractVideoFrames(video, file) {
+
+        const canvas = document.createElement("canvas");
+
+        const context = canvas.getContext("2d");
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const duration = video.duration;
+
+        if (!Number.isFinite(duration) || duration <= 0) {
+            throw new Error("Could not determine video duration.");
+        }
+
+        const frameTimes = [];
+
+        for (let time = 0; time < duration; time += FRAME_INTERVAL) {
+            frameTimes.push(time);
+        }
+
+        if (
+            frameTimes.length === 0 ||
+            duration - frameTimes[frameTimes.length - 1] > 1
+        ) {
+            frameTimes.push(Math.max(0, duration - 0.2));
+        }
+
+        for (let i = 0; i < frameTimes.length; i++) {
+
+            const time = frameTimes[i];
+
+            setStatus(
+                `EXTRACTING VIDEO FRAME ${i + 1}/${frameTimes.length}`
+            );
+
+            await seekVideo(video, time);
+
+            context.drawImage(
+                video,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+            addImageToGallery(
+                canvas.toDataURL("image/jpeg", 0.85),
+                `${file.name} - ${formatTimestamp(time)}`
+            );
+
+        }
+
+    }
+
+    // ==========================================
+    // VIDEO AUDIO TRANSCRIPTION
+    // ==========================================
+
+    async function transcribeVideoAudio(video) {
+
+        if (!video.captureStream && !video.mozCaptureStream) {
+
+            throw new Error(
+                "Your browser does not support video audio capture. Use Chrome."
+            );
+
+        }
+
+        if (!window.MediaRecorder) {
+            throw new Error("Your browser does not support audio recording.");
+        }
+
+        const capture = video.captureStream || video.mozCaptureStream;
+
+        const stream = capture.call(video);
+
+        const audioTracks = stream.getAudioTracks();
+
+        if (!audioTracks.length) {
+
+            stream.getTracks().forEach(track => track.stop());
+
+            appendToDocument(
+                "AUDIO TRANSCRIPTION: No audio track was detected in this video."
+            );
+
+            return;
+
+        }
+
+        const audioStream = new MediaStream(audioTracks);
+
+        let mimeType = "";
+
+        if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) {
+            mimeType = "audio/webm;codecs=opus";
+        } else if (MediaRecorder.isTypeSupported("audio/webm")) {
+            mimeType = "audio/webm";
+        } else if (MediaRecorder.isTypeSupported("audio/mp4")) {
+            mimeType = "audio/mp4";
+        }
+
+        const recorder = mimeType
+            ? new MediaRecorder(audioStream, { mimeType })
+            : new MediaRecorder(audioStream);
+
+        const chunks = [];
+
+        recorder.ondataavailable = event => {
+
+            if (event.data && event.data.size > 0) {
+                chunks.push(event.data);
+            }
+
         };
 
-    }
+        const recordingFinished = new Promise((resolve, reject) => {
 
+            recorder.onstop = resolve;
 
-    /* =====================================================
-       ADD IMAGES TO CASE IMAGES GALLERY
-    ===================================================== */
-
-    function addImages(images) {
-
-        // Remove the original empty placeholders on first import.
-        imageGallery
-            .querySelectorAll(".image-placeholder")
-            .forEach(node => node.remove());
-
-        images.forEach((item, index) => {
-
-            const url = URL.createObjectURL(item.blob);
-
-            createdImageUrls.push(url);
-
-            const card = document.createElement("div");
-
-            card.className = "image-evidence-card";
-
-            const image = document.createElement("img");
-
-            image.src = url;
-
-            image.alt = `Imported evidence ${item.name}`;
-
-            image.loading = "lazy";
-
-            const caption = document.createElement("span");
-
-            caption.textContent =
-                item.name || `IMPORTED IMAGE ${index + 1}`;
-
-            card.append(image, caption);
-
-            imageGallery.appendChild(card);
+            recorder.onerror = () => {
+                reject(new Error("Audio recording failed."));
+            };
 
         });
 
-    }
+        const videoEnded = new Promise((resolve, reject) => {
 
+            video.addEventListener("ended", resolve, {
+                once: true
+            });
 
-    /* =====================================================
-       UPLOAD BUTTON STATE
-    ===================================================== */
+            video.addEventListener("error", () => {
+                reject(new Error("Video playback failed during audio capture."));
+            }, {
+                once: true
+            });
 
-    function setBusy(isBusy) {
-
-        uploadButton.disabled = isBusy;
-
-        uploadButton.querySelector("span").textContent =
-            isBusy ? "IMPORTING..." : "UPLOAD DOCUMENT";
-
-    }
-
-
-    /* =====================================================
-       UPLOAD STATUS
-    ===================================================== */
-
-    function setStatus(message, type = "") {
-
-        uploadStatus.textContent = message;
-
-        uploadStatus.classList.toggle(
-            "is-error",
-            type === "error"
-        );
-
-        uploadStatus.classList.toggle(
-            "is-success",
-            type === "success"
-        );
-
-    }
-
-
-    /* =====================================================
-       CLEAN UP IMAGE PREVIEWS
-    ===================================================== */
-
-    window.addEventListener("beforeunload", () => {
-
-        createdImageUrls.forEach(url => {
-            URL.revokeObjectURL(url);
         });
 
-    });
+        try {
 
-})();
+            await seekVideo(video, 0);
+
+            recorder.start(1000);
+
+            await video.play();
+
+            setStatus("RECORDING VIDEO AUDIO FOR TRANSCRIPTION...");
+
+            await videoEnded;
+
+            if (recorder.state !== "inactive") {
+                recorder.stop();
+            }
+
+            await recordingFinished;
+
+            const audioBlob = new Blob(chunks, {
+                type: recorder.mimeType || "audio/webm"
+            });
+
+            if (!audioBlob.size) {
+                throw new Error("No audio data was captured.");
+            }
+
+            if (audioBlob.size > 24 * 1024 * 1024) {
+                throw new Error(
+                    "Extracted audio exceeds the 24 MB server limit. Try a shorter video."
+                );
+            }
+
+            setStatus("SENDING AUDIO TO LOCAL WHISPER...");
+
+            const formData = new FormData();
+
+            const extension = audioBlob.type.includes("mp4")
+                ? "m4a"
+                : "webm";
+
+            formData.append(
+                "audio",
+                audioBlob,
+                `forenza-audio.${extension}`
+            );
+
+            const response = await fetch(TRANSCRIPTION_SERVER, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.error || "Transcription server error."
+                );
+            }
+
+            if (!data.transcript || !data.transcript.trim()) {
+
+                appendToDocument(
+                    "AI TRANSCRIPTION: No clear speech was detected."
+                );
+
+                return;
+
+            }
+
+            appendToDocument(
+                `AI AUDIO TRANSCRIPTION - ${new Date().toLocaleString()}\n\n${data.transcript}\n\nNOTE: This is an automatically generated transcript. Verify it against the original video.`
+            );
+
+        } finally {
+
+            stream.getTracks().forEach(track => track.stop());
+
+            audioStream.getTracks().forEach(track => track.stop());
+
+        }
+
+    }
+
+    // ==========================================
+    // COMPLETE VIDEO PROCESSING
+    // ==========================================
+
+    async function processVideo(file) {
+
+        const videoURL = URL.createObjectURL(file);
+
+        const video = document.createElement("video");
+
+        video.preload = "auto";
+        video.playsInline = true;
+        video.controls = false;
+
+        try {
+
+            const metadataPromise = waitForEvent(
+                video,
+                "loadedmetadata"
+            );
+
+            video.src = videoURL;
+            video.load();
+
+            await metadataPromise;
+
+            if (!video.videoWidth || !video.videoHeight) {
+                throw new Error(
+                    "This video format cannot be decoded by your browser."
+                );
+            }
+
+            appendToDocument(
+                `IMPORTED VIDEO: ${file.name}\nDuration: ${formatTimestamp(video.duration)}\nFrame extraction interval: ${FRAME_INTERVAL} seconds.`
+            );
+
+            // Extract frames into the six original image placeholders.
+            await extractVideoFrames(video, file);
+
+            // Transcribe video audio using local Whisper.
+            await transcribeVideoAudio(video);
+
+        } finally {
+
+            video.pause();
+
+            video.removeAttribute("src");
+
+            video.load();
+
+            URL.revokeObjectURL(videoURL);
+
+        }
+
+    }
+
+    // ==========================================
+    // INITIALISE
+    // ==========================================
+
+    updateWordCount();
+
+    console.log(
+        `FORENZA: Evidence upload system ready. ${imageSlots.length} original image placeholders detected.`
+    );
+
+});

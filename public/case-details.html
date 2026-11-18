@@ -1,0 +1,1155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+
+    <title>FORENZA | Case Workspace</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- LUCIDE ICONS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- DASHBOARD CSS -->
+    <link rel="stylesheet" href="./dashboard.css">
+
+    <!-- CASE WORKSPACE CSS -->
+    <style>
+
+        /* =====================================
+           CASE WORKSPACE
+        ====================================== */
+
+        .workspace-page {
+            width: 100%;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 1.5px;
+
+            transition: color 0.25s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+
+        /* =====================================
+           CASE HEADING
+        ====================================== */
+
+        .case-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 25px;
+            flex-wrap: wrap;
+
+            margin-bottom: 35px;
+        }
+
+        .case-heading h1 {
+            color: var(--gold);
+            font-size: clamp(26px, 3vw, 36px);
+            font-weight: 800;
+            letter-spacing: -0.8px;
+
+            margin-bottom: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .case-eyebrow {
+            color: var(--bronze-light);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 3px;
+
+            margin-bottom: 12px;
+        }
+
+        .case-reference {
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .case-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 10px 15px;
+
+            border: 1px solid var(--border);
+            border-radius: 4px;
+
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        .case-status::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .case-status.active {
+            color: #8FC99A;
+            border-color: rgba(72, 145, 85, 0.35);
+            background: rgba(72, 145, 85, 0.08);
+        }
+
+        .case-status.pending {
+            color: var(--gold);
+            border-color: rgba(215, 177, 125, 0.35);
+            background: rgba(215, 177, 125, 0.08);
+        }
+
+        .case-status.closed {
+            color: #D58C83;
+            border-color: rgba(180, 75, 65, 0.35);
+            background: rgba(180, 75, 65, 0.08);
+        }
+
+
+        /* =====================================
+           CASE INFORMATION
+        ====================================== */
+
+        .case-information {
+            padding: 28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(168, 117, 61, 0.045),
+                    transparent 65%
+                ),
+                var(--panel);
+
+            border: 1px solid var(--border);
+            border-radius: 6px;
+
+            margin-bottom: 38px;
+        }
+
+        .case-section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        .case-section-heading h2 {
+            color: var(--gold);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .section-code {
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 2px;
+        }
+
+        .case-information-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .information-item {
+            padding-left: 14px;
+            border-left: 2px solid var(--bronze-dark);
+        }
+
+        .information-label {
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 1.5px;
+
+            margin-bottom: 10px;
+        }
+
+        .information-value {
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .case-description {
+            margin-top: 27px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .case-description p {
+            color: #99836A;
+            font-size: 12px;
+            line-height: 1.9;
+
+            margin-top: 10px;
+            overflow-wrap: anywhere;
+        }
+
+
+        /* =====================================
+           INVESTIGATION MODULES
+        ====================================== */
+
+        .modules-section {
+            margin-bottom: 38px;
+        }
+
+        .modules-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 15px;
+
+            margin-bottom: 23px;
+        }
+
+        .modules-heading h2 {
+            color: var(--text);
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .modules-heading p {
+            color: var(--bronze-light);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 2px;
+
+            margin-bottom: 9px;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+
+        /* =====================================
+           MODULE CARDS
+        ====================================== */
+
+        .workspace-card {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+
+            min-height: 270px;
+            padding: 25px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(168, 117, 61, 0.045),
+                    transparent 60%
+                ),
+                #0B0908;
+
+            border: 1px solid var(--border);
+            border-radius: 6px;
+
+            box-shadow:
+                inset 0 0 25px rgba(168, 117, 61, 0.025),
+                0 8px 25px rgba(0, 0, 0, 0.3);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                background 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .workspace-card::before {
+            content: "";
+
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 55px;
+            height: 1px;
+
+            background: var(--gold);
+        }
+
+        .workspace-card:hover {
+            transform: translateY(-5px);
+
+            border-color: rgba(201, 155, 98, 0.75);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(168, 117, 61, 0.09),
+                    transparent 65%
+                ),
+                #0D0B09;
+
+            box-shadow:
+                inset 0 0 30px rgba(168, 117, 61, 0.045),
+                0 12px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        .workspace-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 25px;
+        }
+
+        .workspace-icon {
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--bronze-light);
+
+            background: rgba(168, 117, 61, 0.10);
+            border: 1px solid rgba(168, 117, 61, 0.30);
+            border-radius: 5px;
+        }
+
+        .workspace-icon svg {
+            width: 25px;
+            height: 25px;
+            stroke-width: 1.6;
+        }
+
+        .workspace-number {
+            color: rgba(201, 155, 98, 0.48);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .workspace-card h3 {
+            color: var(--gold);
+            font-size: 16px;
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+        .workspace-card p {
+            color: #99836A;
+            font-size: 11px;
+            line-height: 1.9;
+
+            flex: 1;
+            margin-bottom: 23px;
+        }
+
+        .workspace-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            width: 100%;
+            padding: 13px 0 0;
+
+            background: transparent;
+            border: none;
+            border-top: 1px solid var(--border-subtle);
+
+            color: var(--bronze-light);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+
+            cursor: pointer;
+
+            transition:
+                color 0.25s ease,
+                gap 0.25s ease;
+        }
+
+        .workspace-button:hover {
+            color: var(--gold);
+        }
+
+        .workspace-button svg {
+            width: 17px;
+            height: 17px;
+
+            transition: transform 0.25s ease;
+        }
+
+        .workspace-button:hover svg {
+            transform: translateX(5px);
+        }
+
+
+        /* =====================================
+           CASE ACTIVITY
+        ====================================== */
+
+        .activity-section {
+            margin-bottom: 25px;
+        }
+
+        .activity-panel {
+            background: var(--panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+
+            padding: 25px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+
+            padding: 15px 0;
+
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--bronze-light);
+            background: rgba(168, 117, 61, 0.09);
+            border: 1px solid var(--border);
+
+            border-radius: 5px;
+        }
+
+        .activity-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .activity-details strong {
+            display: block;
+
+            color: var(--text);
+            font-size: 11px;
+
+            margin-bottom: 6px;
+        }
+
+        .activity-details span {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+
+        /* =====================================
+           CASE NOT FOUND
+        ====================================== */
+
+        .case-not-found {
+            display: none;
+
+            padding: 55px 25px;
+
+            text-align: center;
+
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .case-not-found svg {
+            width: 40px;
+            height: 40px;
+
+            color: var(--bronze-light);
+
+            margin-bottom: 20px;
+        }
+
+        .case-not-found h2 {
+            color: var(--gold);
+            font-size: 19px;
+
+            margin-bottom: 10px;
+        }
+
+        .case-not-found p {
+            color: var(--muted);
+            font-size: 12px;
+
+            margin-bottom: 22px;
+        }
+
+        .return-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 13px 18px;
+
+            color: #080808;
+            background: var(--bronze);
+
+            border: 1px solid var(--bronze-light);
+            border-radius: 4px;
+
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 1px;
+
+            transition: background 0.25s ease;
+        }
+
+        .return-button:hover {
+            background: var(--bronze-light);
+        }
+
+        .return-button svg {
+            width: 15px;
+            height: 15px;
+
+            margin: 0;
+            color: #080808;
+        }
+
+
+        /* =====================================
+           RESPONSIVE
+        ====================================== */
+
+        @media (max-width: 1100px) {
+
+            .modules-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+        @media (max-width: 750px) {
+
+            .case-information-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workspace-card {
+                min-height: 240px;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .case-heading {
+                margin-bottom: 25px;
+            }
+
+            .case-information {
+                padding: 20px;
+            }
+
+            .modules-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .activity-panel {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- BACKGROUND TEXTURE -->
+
+    <div class="texture"></div>
+
+
+    <div class="dashboard-layout">
+
+
+        <!-- =====================================
+             SIDEBAR
+        ====================================== -->
+
+        <aside class="sidebar">
+
+
+            <!-- FORENZA BRANDING -->
+
+            <div class="sidebar-brand">
+
+                <div class="sidebar-drone">
+
+                    <svg viewBox="0 0 120 100" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+
+                        <g stroke="currentColor"
+                           stroke-width="3"
+                           stroke-linecap="round">
+
+                            <path d="M49 43L25 22"/>
+                            <path d="M71 43L95 22"/>
+                            <path d="M49 57L25 78"/>
+                            <path d="M71 57L95 78"/>
+
+                        </g>
+
+                        <g stroke="currentColor" stroke-width="2">
+
+                            <ellipse cx="19" cy="16" rx="15" ry="5"/>
+                            <ellipse cx="101" cy="16" rx="15" ry="5"/>
+                            <ellipse cx="19" cy="84" rx="15" ry="5"/>
+                            <ellipse cx="101" cy="84" rx="15" ry="5"/>
+
+                        </g>
+
+                        <path d="M42 37L52 30H68L78 37L83 50L78 63L68 70H52L42 63L37 50Z"
+                              fill="#211B14"
+                              stroke="currentColor"
+                              stroke-width="2"/>
+
+                        <circle cx="60" cy="50" r="5"
+                                fill="#080808"
+                                stroke="currentColor"
+                                stroke-width="2"/>
+
+                    </svg>
+
+                </div>
+
+                <span class="brand-name">FORENZA</span>
+
+                <span class="brand-subtitle">
+                    FORENSIC INTELLIGENCE
+                </span>
+
+            </div>
+
+
+            <!-- ANIMATED FORENSIC DIVIDER -->
+
+            <div class="sidebar-divider forensic-divider"></div>
+
+
+            <!-- NAVIGATION -->
+
+            <nav class="sidebar-navigation">
+
+                <p class="nav-heading">WORKSPACE</p>
+
+
+                <a href="cases.html" class="nav-item active">
+
+                    <i data-lucide="folder-open" class="nav-icon"></i>
+
+                    <span>Cases</span>
+
+                </a>
+
+
+                <a href="dashboard.html" class="nav-item">
+
+                    <i data-lucide="house" class="nav-icon"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="drone.html" class="nav-item">
+
+                    <i data-lucide="drone" class="nav-icon"></i>
+
+                    <span>Drone Live Feed</span>
+
+                    <span class="live-indicator"
+                          title="Live drone feed"></span>
+
+                </a>
+
+
+                <a href="evidence.html" class="nav-item">
+
+                    <i data-lucide="file-text" class="nav-icon"></i>
+
+                    <span>Evidence</span>
+
+                </a>
+
+
+                <a href="processing.html" class="nav-item">
+
+                    <i data-lucide="monitor" class="nav-icon"></i>
+
+                    <span>AI Summary</span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- SIGN OUT -->
+
+            <div class="sidebar-footer">
+
+                <a href="#" class="logout-link">
+
+                    <i data-lucide="log-out" class="nav-icon"></i>
+
+                    <span>Sign out</span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =====================================
+             MAIN CONTENT
+        ====================================== -->
+
+        <main class="main-content">
+
+
+            <!-- TOP BAR -->
+
+            <header class="topbar">
+
+                <div class="breadcrumb">
+
+                    <span>FORENZA</span>
+
+                    <span class="breadcrumb-divider">/</span>
+
+                    <a href="cases.html">Cases</a>
+
+                    <span class="breadcrumb-divider">/</span>
+
+                    <span class="current-page">Case Workspace</span>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- =====================================
+                 CASE WORKSPACE CONTENT
+            ====================================== -->
+
+            <div class="content-wrapper">
+
+                <div class="workspace-page" id="workspace">
+
+
+                    <!-- BACK TO CASES -->
+
+                    <a href="cases.html" class="back-link">
+
+                        <i data-lucide="arrow-left"></i>
+
+                        BACK TO ALL CASES
+
+                    </a>
+
+
+
+                    <!-- CASE HEADING -->
+
+                    <section class="case-heading">
+
+                        <div>
+
+                            <p class="case-eyebrow">
+                                FORENSIC INVESTIGATION / CASE WORKSPACE
+                            </p>
+
+                            <h1 id="caseName">Loading Case...</h1>
+
+                            <p class="case-reference" id="caseReference">
+                                CASE REFERENCE: —
+                            </p>
+
+                        </div>
+
+
+                        <span class="case-status active" id="caseStatus">
+                            LOADING
+                        </span>
+
+                    </section>
+
+
+
+                    <!-- CASE INFORMATION -->
+
+                    <section class="case-information">
+
+                        <div class="case-section-heading">
+
+                            <h2>Investigation Overview</h2>
+
+                            <span class="section-code">
+                                CASE INFORMATION
+                            </span>
+
+                        </div>
+
+
+                        <div class="case-information-grid">
+
+
+                            <div class="information-item">
+
+                                <p class="information-label">
+                                    CASE REFERENCE
+                                </p>
+
+                                <p class="information-value"
+                                   id="overviewReference">
+                                    —
+                                </p>
+
+                            </div>
+
+
+                            <div class="information-item">
+
+                                <p class="information-label">
+                                    INVESTIGATION LOCATION
+                                </p>
+
+                                <p class="information-value"
+                                   id="overviewLocation">
+                                    —
+                                </p>
+
+                            </div>
+
+
+                            <div class="information-item">
+
+                                <p class="information-label">
+                                    DATE CREATED
+                                </p>
+
+                                <p class="information-value"
+                                   id="overviewDate">
+                                    —
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="case-description">
+
+                            <p class="information-label">
+                                CASE DESCRIPTION
+                            </p>
+
+                            <p id="caseDescription">
+                                Loading investigation description...
+                            </p>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- INVESTIGATION MODULES -->
+
+                    <section class="modules-section">
+
+
+                        <div class="modules-heading">
+
+                            <div>
+
+                                <p>INVESTIGATION RESOURCES</p>
+
+                                <h2>Case Workspace Modules</h2>
+
+                            </div>
+
+                            <span class="section-code">
+                                SELECT A MODULE
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="modules-grid">
+
+
+                            <!-- DRONE LIVE FEED -->
+
+                            <article class="workspace-card">
+
+                                <div class="workspace-card-top">
+
+                                    <div class="workspace-icon">
+
+                                        <i data-lucide="drone"></i>
+
+                                    </div>
+
+                                    <span class="workspace-number">
+                                        01
+                                    </span>
+
+                                </div>
+
+
+                                <h3>Drone Live Feed</h3>
+
+                                <p>
+                                    Access aerial surveillance footage,
+                                    monitor drone activity and capture
+                                    crime-scene imagery.
+                                </p>
+
+
+                                <button class="workspace-button"
+                                        id="openDrone">
+
+                                    OPEN DRONE FEED
+
+                                    <i data-lucide="arrow-right"></i>
+
+                                </button>
+
+                            </article>
+
+
+
+                            <!-- EVIDENCE -->
+
+                            <article class="workspace-card">
+
+                                <div class="workspace-card-top">
+
+                                    <div class="workspace-icon">
+
+                                        <i data-lucide="file-text"></i>
+
+                                    </div>
+
+                                    <span class="workspace-number">
+                                        02
+                                    </span>
+
+                                </div>
+
+
+                                <h3>Evidence Files</h3>
+
+                                <p>
+                                    Access organised photographs, videos,
+                                    forensic evidence records and PDF
+                                    investigation documents.
+                                </p>
+
+
+                                <button class="workspace-button"
+                                        id="openEvidence">
+
+                                    OPEN EVIDENCE
+
+                                    <i data-lucide="arrow-right"></i>
+
+                                </button>
+
+                            </article>
+
+
+
+                            <!-- AI SUMMARY -->
+
+                            <article class="workspace-card">
+
+                                <div class="workspace-card-top">
+
+                                    <div class="workspace-icon">
+
+                                        <i data-lucide="monitor"></i>
+
+                                    </div>
+
+                                    <span class="workspace-number">
+                                        03
+                                    </span>
+
+                                </div>
+
+
+                                <h3>AI Summary</h3>
+
+                                <p>
+                                    Review AI-assisted evidence analysis,
+                                    generated descriptions and preliminary
+                                    investigation findings.
+                                </p>
+
+
+                                <button class="workspace-button"
+                                        id="openSummary">
+
+                                    OPEN AI SUMMARY
+
+                                    <i data-lucide="arrow-right"></i>
+
+                                </button>
+
+                            </article>
+
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- CASE ACTIVITY -->
+
+                    <section class="activity-section">
+
+
+                        <div class="modules-heading">
+
+                            <div>
+
+                                <p>INVESTIGATION RECORD</p>
+
+                                <h2>Case Activity</h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="activity-panel" id="activityList">
+
+                        </div>
+
+                    </section>
+
+
+                </div>
+
+
+
+                <!-- CASE NOT FOUND -->
+
+                <div class="case-not-found" id="caseNotFound">
+
+                    <i data-lucide="folder-x"></i>
+
+                    <h2>Case Not Found</h2>
+
+                    <p>
+                        The requested investigation could not be found.
+                        Please return to your case records.
+                    </p>
+
+                    <a href="cases.html" class="return-button">
+
+                        <i data-lucide="arrow-left"></i>
+
+                        RETURN TO CASES
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- LUCIDE ICON INITIALISATION -->
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+
+    <!-- FIREBASE AUTHENTICATION -->
+
+    <script type="module" src="./case-details.js"></script>
+
+</body>
+</html>

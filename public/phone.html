@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080808">
+    <title>FORENZA | Mobile Drone Unit</title>
+
+    <link rel="stylesheet" href="./dashboard.css">
+
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #080808;
+            color: #DCC5A5;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .phone-container {
+            width: min(100% - 32px, 560px);
+            margin: 0 auto;
+            padding: 28px 0 40px;
+        }
+
+        .phone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(168,117,61,0.35);
+        }
+
+        .brand {
+            color: #C99B62;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 4px;
+        }
+
+        .unit-label {
+            color: #806B53;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-align: right;
+        }
+
+        .section-heading {
+            margin-bottom: 18px;
+        }
+
+        .section-heading h1 {
+            margin: 0 0 8px;
+            color: #D7B17D;
+            font-size: clamp(22px, 6vw, 30px);
+            letter-spacing: 1px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #806B53;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .camera-panel {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid rgba(168,117,61,0.55);
+            border-radius: 8px;
+        }
+
+        #phone-preview {
+            position: absolute;
+            inset: 0;
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #000;
+        }
+
+        #phone-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            color: #806B53;
+            text-align: center;
+        }
+
+        #phone-placeholder i {
+            width: 38px;
+            height: 38px;
+            color: #A8753D;
+        }
+
+        #phone-placeholder strong {
+            color: #C99B62;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        #phone-placeholder span {
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .camera-corner {
+            position: absolute;
+            z-index: 2;
+            width: 24px;
+            height: 24px;
+            border-color: #C99B62;
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .top-left {
+            top: 10px;
+            left: 10px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .top-right {
+            top: 10px;
+            right: 10px;
+            border-width: 2px 2px 0 0;
+        }
+
+        .bottom-left {
+            bottom: 10px;
+            left: 10px;
+            border-width: 0 0 2px 2px;
+        }
+
+        .bottom-right {
+            right: 10px;
+            bottom: 10px;
+            border-width: 0 2px 2px 0;
+        }
+
+        .camera-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            color: #806B53;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .status-value {
+            color: #C99B62;
+        }
+
+        .recording-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+            padding: 14px;
+            background: #0D0B09;
+            border: 1px solid rgba(168,117,61,0.25);
+            border-radius: 6px;
+        }
+
+        .recording-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #DCC5A5;
+            font-size: 12px;
+        }
+
+        #recording-indicator {
+            width: 9px;
+            height: 9px;
+            flex-shrink: 0;
+            background: #625344;
+            border-radius: 50%;
+        }
+
+        #recording-indicator.active {
+            background: #C84B3C;
+            box-shadow: 0 0 10px rgba(200,75,60,0.7);
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            50% { opacity: 0.35; }
+        }
+
+        #recording-status {
+            color: #C99B62;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .phone-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .phone-button {
+            display: flex;
+            min-height: 48px;
+            justify-content: center;
+            align-items: center;
+            gap: 9px;
+            padding: 13px 16px;
+            border: 1px solid #A8753D;
+            border-radius: 5px;
+            background: #15110D;
+            color: #D7B17D;
+            font-family: 'Manrope', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .phone-button.primary {
+            grid-column: 1 / -1;
+            background: #A8753D;
+            color: #080808;
+        }
+
+        .phone-button.stop {
+            grid-column: 1 / -1;
+            border-color: #8C3F32;
+            background: #351813;
+            color: #F0B0A5;
+        }
+
+        .phone-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .phone-button i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .phone-note {
+            margin-top: 22px;
+            padding: 14px;
+            border-left: 2px solid #A8753D;
+            background: #0D0B09;
+            color: #806B53;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 380px) {
+            .phone-container {
+                width: min(100% - 22px, 560px);
+            }
+
+            .phone-button {
+                padding: 12px 8px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="phone-container">
+
+        <header class="phone-header">
+            <div class="brand">FORENZA</div>
+            <div class="unit-label">
+                MOBILE DRONE UNIT<br>
+                CAMERA TRANSMISSION
+            </div>
+        </header>
+
+        <section class="section-heading">
+            <h1>Drone Camera</h1>
+            <p>
+                Start your camera to transmit a live video feed
+                to the FORENZA investigation dashboard.
+            </p>
+        </section>
+
+        <section class="camera-panel">
+            <video
+                id="phone-preview"
+                autoplay
+                muted
+                playsinline
+            ></video>
+
+            <div id="phone-placeholder">
+                <i data-lucide="camera"></i>
+                <strong>CAMERA STANDBY</strong>
+                <span>Press START CAMERA to begin transmission</span>
+            </div>
+
+            <div class="camera-corner top-left"></div>
+            <div class="camera-corner top-right"></div>
+            <div class="camera-corner bottom-left"></div>
+            <div class="camera-corner bottom-right"></div>
+        </section>
+
+        <div class="camera-meta">
+            <span>TRANSMISSION STATUS</span>
+            <span id="phone-status" class="status-value">READY</span>
+        </div>
+
+        <div class="recording-row">
+            <div class="recording-label">
+                <span id="recording-indicator"></span>
+                <span>LOCAL RECORDING</span>
+            </div>
+            <span id="recording-status">RECORDING INACTIVE</span>
+        </div>
+
+        <section class="phone-controls">
+            <button
+                type="button"
+                class="phone-button primary"
+                id="start-phone-camera"
+            >
+                <i data-lucide="video"></i>
+                START CAMERA
+            </button>
+
+            <button
+                type="button"
+                class="phone-button"
+                id="switch-phone-camera"
+                disabled
+            >
+                <i data-lucide="refresh-cw"></i>
+                SWITCH CAMERA
+            </button>
+
+            <button
+                type="button"
+                class="phone-button stop"
+                id="stop-phone-camera"
+                disabled
+            >
+                <i data-lucide="square"></i>
+                STOP & SAVE
+            </button>
+        </section>
+
+        <div class="phone-note">
+            Keep this page open while transmitting. Your camera feed
+            is sent to the FORENZA laptop, while a local recording is
+            saved to your phone when you stop the camera.
+        </div>
+
+    </main>
+
+    <script>
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    </script>
+
+    <script type="module" src="./phone.js?v=4"></script>
+</body>
+</html>

@@ -1,13 +1,20 @@
 
+import {
+    auth,
+    onAuthStateChanged,
+    signOut
+} from "./firebase.js";
+
+// =====================================
+// ELEMENTS
+// =====================================
+
 const caseModal = document.getElementById("caseModal");
 const caseForm = document.getElementById("caseForm");
 const caseList = document.getElementById("caseList");
 
-const newCaseButtons = [
-    document.getElementById("openCreateModal"),
-    document.getElementById("emptyCreateButton")
-];
-
+const openCreateModal = document.getElementById("openCreateModal");
+const emptyCreateButton = document.getElementById("emptyCreateButton");
 const closeCaseModal = document.getElementById("closeCaseModal");
 const cancelCase = document.getElementById("cancelCase");
 
@@ -18,158 +25,327 @@ const caseCount = document.getElementById("caseCount");
 
 const searchCases = document.getElementById("searchCases");
 const filterStatus = document.getElementById("filterStatus");
+const emptyState = document.getElementById("emptyState");
 
-let cases = JSON.parse(localStorage.getItem("forenzaCases")) || [];
+
+// =====================================
+// CASE STORAGE
+// =====================================
+
+const STORAGE_KEY = "forenzaCases";
+
+let cases = [];
+
+function loadCases() {
+    try {
+        const storedCases = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        cases = Array.isArray(storedCases) ? storedCases : [];
+    } catch (error) {
+        console.error("Could not load cases:", error);
+        cases = [];
+    }
+}
+
+function saveCases() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cases));
+}
+
+
+// =====================================
+// AUTHENTICATION
+// =====================================
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.replace("login.html");
+        return;
+    }
+
+    loadCases();
+    renderCases();
+});
+
+
+// =====================================
+// SIGN OUT
+// =====================================
+
+document.querySelector(".logout-link")?.addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    try {
+        await signOut(auth);
+        window.location.replace("login.html");
+    } catch (error) {
+        console.error("Sign out error:", error);
+        alert("Unable to sign out. Please try again.");
+    }
+});
+
+
+// =====================================
+// CREATE CASE MODAL
+// =====================================
 
 function openModal() {
     caseForm.reset();
     caseModal.classList.add("active");
-    caseModal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+    document.getElementById("caseName").focus();
 }
 
 function closeModal() {
     caseModal.classList.remove("active");
-    caseModal.style.display = "none";
+    document.body.style.overflow = "";
 }
 
-newCaseButtons.forEach(button => {
-    if (button) {
-        button.addEventListener("click", openModal);
+openCreateModal?.addEventListener("click", openModal);
+emptyCreateButton?.addEventListener("click", openModal);
+closeCaseModal?.addEventListener("click", closeModal);
+cancelCase?.addEventListener("click", closeModal);
+
+caseModal?.addEventListener("click", (event) => {
+    if (event.target === caseModal) {
+        closeModal();
     }
 });
 
-if (closeCaseModal) {
-    closeCaseModal.addEventListener("click", closeModal);
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && caseModal.classList.contains("active")) {
+        closeModal();
+    }
+});
+
+
+// =====================================
+// GENERATE CASE ID
+// =====================================
+
+function generateCaseId() {
+    return "FZ-" + Date.now().toString(36).toUpperCase();
 }
 
-if (cancelCase) {
-    cancelCase.addEventListener("click", closeModal);
-}
 
-function saveCases() {
-    localStorage.setItem("forenzaCases", JSON.stringify(cases));
-}
+// =====================================
+// CREATE NEW CASE
+// =====================================
+
+caseForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById("caseName").value.trim();
+    const number = document.getElementById("caseNumber").value.trim();
+    const status = document.getElementById("caseStatus").value;
+    const location = document.getElementById("caseLocation").value.trim();
+    const incidentDate = document.getElementById("caseDate").value;
+    const description = document.getElementById("caseDescription").value.trim();
+
+    if (!name || !number) {
+        alert("Please enter a case name and case reference.");
+        return;
+    }
+
+    const duplicate = cases.some((item) =>
+        item.number.toLowerCase() === number.toLowerCase()
+    );
+
+    if (duplicate) {
+        alert("A case with this reference already exists.");
+        return;
+    }
+
+    const newCase = {
+        id: generateCaseId(),
+        name,
+        number,
+        status,
+        location,
+        incidentDate,
+        description,
+        createdAt: new Date().toISOString()
+    };
+
+    cases.unshift(newCase);
+
+    saveCases();
+    renderCases();
+    closeModal();
+
+    // Clear search and filters so the new case is visible.
+    searchCases.value = "";
+    filterStatus.value = "all";
+    renderCases();
+});
+
+
+// =====================================
+// RENDER CASES
+// =====================================
 
 function renderCases() {
     if (!caseList) return;
 
-    const searchText = searchCases?.value.toLowerCase() || "";
-    const selectedStatus = filterStatus?.value || "all";
+    const searchText = searchCases.value.trim().toLowerCase();
+    const selectedStatus = filterStatus.value;
 
-    const filteredCases = cases.filter(item => {
+    const filteredCases = cases.filter((item) => {
         const matchesSearch =
-            item.name.toLowerCase().includes(searchText) ||
-            item.number.toLowerCase().includes(searchText) ||
-            item.location.toLowerCase().includes(searchText);
+            (item.name || "").toLowerCase().includes(searchText) ||
+            (item.number || "").toLowerCase().includes(searchText) ||
+            (item.location || "").toLowerCase().includes(searchText);
 
         const matchesStatus =
-            selectedStatus === "all" ||
-            item.status.toLowerCase() === selectedStatus.toLowerCase();
+            selectedStatus === "all" || item.status === selectedStatus;
 
         return matchesSearch && matchesStatus;
     });
 
     caseList.innerHTML = "";
 
-    filteredCases.forEach(item => {
-        const card = document.createElement("div");
+    filteredCases.forEach((item) => {
+        const card = document.createElement("article");
         card.className = "case-card";
 
-        card.innerHTML = `
-            <div class="case-card-header">
-                <h3></h3>
-                <span class="case-status"></span>
-            </div>
-            <p class="case-number"></p>
-            <p class="case-location"></p>
-            <p class="case-description"></p>
-        `;
+        const main = document.createElement("div");
+        main.className = "case-card-main";
 
-        card.querySelector("h3").textContent = item.name;
-        card.querySelector(".case-status").textContent = item.status;
-        card.querySelector(".case-number").textContent = `CASE: ${item.number}`;
-        card.querySelector(".case-location").textContent = item.location;
-        card.querySelector(".case-description").textContent = item.description;
+        const number = document.createElement("p");
+        number.className = "case-number";
+        number.textContent = `CASE REFERENCE: ${item.number}`;
 
+        const title = document.createElement("h3");
+        title.textContent = item.name;
+
+        const location = document.createElement("p");
+        location.className = "case-location";
+        location.textContent = item.location
+            ? `LOCATION: ${item.location}`
+            : "LOCATION: Not specified";
+
+        const description = document.createElement("p");
+        description.className = "case-description";
+        description.textContent = item.description || "No case description provided.";
+
+        const date = document.createElement("p");
+        date.className = "case-date";
+
+        const createdDate = item.createdAt
+            ? new Date(item.createdAt).toLocaleDateString()
+            : "Unknown";
+
+        date.textContent = `CREATED: ${createdDate}`;
+
+        main.append(number, title, location, description, date);
+
+        const actions = document.createElement("div");
+        actions.className = "case-card-actions";
+
+        const status = document.createElement("span");
+        status.className = "case-status";
+
+        if (item.status === "Closed") {
+            status.classList.add("status-closed");
+        } else if (item.status === "Pending") {
+            status.classList.add("status-pending");
+        }
+
+        status.textContent = item.status;
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.className = "open-case-button";
+        openButton.innerHTML = 'OPEN CASE <i data-lucide="arrow-up-right"></i>';
+
+        openButton.addEventListener("click", () => {
+            openCase(item.id);
+        });
+
+        actions.append(status, openButton);
+        card.append(main, actions);
         caseList.appendChild(card);
     });
 
-    if (caseCount) {
-        caseCount.textContent = `${filteredCases.length} CASE${filteredCases.length === 1 ? "" : "S"}`;
+    updateStatistics(filteredCases.length);
+
+    const hasCases = filteredCases.length > 0;
+
+    emptyState.classList.toggle("visible", !hasCases);
+
+    if (!hasCases) {
+        document.getElementById("emptyTitle").textContent =
+            cases.length === 0
+                ? "No investigation cases yet"
+                : "No matching cases found";
+
+        document.getElementById("emptyDescription").textContent =
+            cases.length === 0
+                ? "Create your first investigation case to begin."
+                : "Try another search term or change your status filter.";
+
+        emptyCreateButton.style.display =
+            cases.length === 0 ? "inline-flex" : "none";
     }
 
-    if (totalCases) totalCases.textContent = cases.length;
-    if (activeCases) {
-        activeCases.textContent = cases.filter(item =>
-            item.status.toLowerCase() === "active"
-        ).length;
-    }
-    if (closedCases) {
-        closedCases.textContent = cases.filter(item =>
-            item.status.toLowerCase() === "closed"
-        ).length;
-    }
-
-    const emptyState = document.getElementById("emptyState");
-
-    if (emptyState) {
-        emptyState.style.display = filteredCases.length === 0 ? "block" : "none";
+    if (window.lucide) {
+        window.lucide.createIcons();
     }
 }
 
-if (caseForm) {
-    caseForm.addEventListener("submit", event => {
-        event.preventDefault();
 
-        const name = document.getElementById("caseName").value.trim();
-        const number = document.getElementById("caseNumber").value.trim();
-        const status = document.getElementById("caseStatus").value;
-        const location = document.getElementById("caseLocation").value.trim();
-        const description = document.getElementById("caseDescription").value.trim();
+// =====================================
+// OPEN CASE WORKSPACE
+// =====================================
 
-        if (!name || !number || !location || !description) {
-            alert("Please complete all the case details.");
-            return;
-        }
+function openCase(caseId) {
+    const selectedCase = cases.find((item) => item.id === caseId);
 
-        const duplicate = cases.some(item =>
-            item.number.toLowerCase() === number.toLowerCase()
-        );
+    if (!selectedCase) {
+        alert("This investigation case could not be found.");
+        return;
+    }
 
-        if (duplicate) {
-            alert("A case with this case number already exists.");
-            return;
-        }
-
-        cases.push({
-            id: Date.now(),
-            name,
-            number,
-            status,
-            location,
-            description,
-            createdAt: new Date().toISOString()
-        });
-
-        saveCases();
-        renderCases();
-        closeModal();
-    });
+    // Pass the selected case ID to its dedicated workspace.
+    window.location.href =
+        `case-details.html?caseId=${encodeURIComponent(caseId)}`;
 }
 
-if (searchCases) {
-    searchCases.addEventListener("input", renderCases);
+
+// =====================================
+// UPDATE STATISTICS
+// =====================================
+
+function updateStatistics(filteredCount) {
+    totalCases.textContent = cases.length;
+
+    activeCases.textContent = cases.filter(
+        (item) => item.status === "Active"
+    ).length;
+
+    closedCases.textContent = cases.filter(
+        (item) => item.status === "Closed"
+    ).length;
+
+    caseCount.textContent =
+        `${filteredCount} RECORD${filteredCount === 1 ? "" : "S"}`;
 }
 
-if (filterStatus) {
-    filterStatus.addEventListener("change", renderCases);
-}
 
-// Heading typing effect
+// =====================================
+// SEARCH AND FILTER
+// =====================================
+
+searchCases?.addEventListener("input", renderCases);
+filterStatus?.addEventListener("change", renderCases);
+
+
+// =====================================
+// TYPING HEADING
+// =====================================
+
 const heading = document.getElementById("dashboard-typing");
 
 if (heading) {
-    const headingText = "FIND A PARTICULAR CASE HERE";
+    const headingText = "INVESTIGATION CASE FILES";
     let index = 0;
 
     heading.textContent = "";
@@ -185,4 +361,11 @@ if (heading) {
     typeHeading();
 }
 
-renderCases();
+
+// =====================================
+// ICON INITIALISATION
+// =====================================
+
+if (window.lucide) {
+    window.lucide.createIcons();
+}

@@ -23,7 +23,6 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
 
-        <!-- FORENZA BRANDING -->
         <div class="sidebar-brand">
 
             <div class="sidebar-drone">
@@ -66,89 +65,45 @@
 
         </div>
 
-
-        <!-- ANIMATED FORENSIC DIVIDER -->
-
         <div class="sidebar-divider forensic-divider"></div>
-
-
-        <!-- NAVIGATION -->
 
         <nav class="sidebar-navigation">
 
             <p class="nav-heading">WORKSPACE</p>
 
-
-            <!-- CASES -->
-
             <a href="cases.html" class="nav-item">
-
                 <i data-lucide="folder-open" class="nav-icon"></i>
-
                 <span>Cases</span>
-
             </a>
-
-
-            <!-- DASHBOARD -->
 
             <a href="dashboard.html" class="nav-item">
-
                 <i data-lucide="house" class="nav-icon"></i>
-
                 <span>Dashboard</span>
-
             </a>
-
-
-            <!-- DRONE LIVE FEED -->
 
             <a href="drone.html" class="nav-item">
-
                 <i data-lucide="drone" class="nav-icon"></i>
-
                 <span>Drone Live Feed</span>
-
-                <span class="live-indicator"
-                      title="Live drone feed"></span>
-
+                <span class="live-indicator" title="Live drone feed"></span>
             </a>
-
-
-            <!-- EVIDENCE -->
 
             <a href="evidence.html" class="nav-item active">
-
                 <i data-lucide="file-text" class="nav-icon"></i>
-
                 <span>Evidence</span>
-
             </a>
 
-
-            <!-- AI SUMMARY -->
-
             <a href="processing.html" class="nav-item">
-
                 <i data-lucide="monitor" class="nav-icon"></i>
-
                 <span>AI Summary</span>
-
             </a>
 
         </nav>
 
-
-        <!-- SIGN OUT -->
-
         <div class="sidebar-footer">
 
             <a href="#" class="logout-link">
-
                 <i data-lucide="log-out" class="nav-icon"></i>
-
                 <span>Sign out</span>
-
             </a>
 
         </div>
@@ -162,13 +117,9 @@
         <header class="topbar">
 
             <div class="breadcrumb">
-
                 <span>FORENZA</span>
-
                 <span class="breadcrumb-divider">/</span>
-
                 <span class="current-page">Evidence</span>
-
             </div>
 
         </header>
@@ -179,10 +130,11 @@
             <section class="evidence-section">
 
                 <!-- PAGE HEADING -->
-
                 <div class="evidence-heading">
 
-                    <p class="section-eyebrow">FORENSIC EVIDENCE MANAGEMENT</p>
+                    <p class="section-eyebrow">
+                        FORENSIC EVIDENCE MANAGEMENT
+                    </p>
 
                     <h1>
                         <span id="typing-title"></span>
@@ -192,9 +144,8 @@
                 </div>
 
 
-                <!-- DOCUMENT UPLOAD -->
-
-                <section class="evidence-upload" aria-label="Upload evidence document">
+                <!-- EVIDENCE UPLOAD -->
+                <section class="evidence-upload" aria-label="Upload forensic evidence">
 
                     <div class="upload-copy">
 
@@ -204,7 +155,11 @@
 
                         <div>
                             <h2>IMPORT EVIDENCE</h2>
-                            <p>Upload a PDF, Word document or text file to organise its contents</p>
+
+                            <p>
+                                Upload PDF documents, Word files, text files or video recordings
+                                to extract and organise forensic evidence
+                            </p>
                         </div>
 
                     </div>
@@ -215,24 +170,32 @@
                         <input
                             type="file"
                             id="evidence-upload-input"
-                            accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+                            accept=".pdf,.docx,.txt,.mp4,.mov,.webm,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,video/mp4,video/webm,video/quicktime"
                             hidden
                         >
 
-                        <button type="button" class="upload-button" id="evidence-upload-button">
-
+                        <button
+                            type="button"
+                            class="upload-button"
+                            id="evidence-upload-button"
+                        >
                             <i data-lucide="upload"></i>
-
-                            <span>UPLOAD DOCUMENT</span>
-
+                            <span>UPLOAD EVIDENCE</span>
                         </button>
 
-                        <span class="upload-formats">PDF · DOCX · TXT</span>
+                        <span class="upload-formats">
+                            PDF · DOCX · TXT · MP4 · MOV · WEBM
+                        </span>
 
                     </div>
 
 
-                    <div class="upload-status" id="upload-status" role="status" aria-live="polite">
+                    <div
+                        class="upload-status"
+                        id="upload-status"
+                        role="status"
+                        aria-live="polite"
+                    >
                         READY TO IMPORT
                     </div>
 
@@ -240,12 +203,10 @@
 
 
                 <!-- EVIDENCE PANELS -->
-
                 <div class="evidence-grid">
 
 
                     <!-- CASE DOCUMENT -->
-
                     <section class="evidence-panel document-panel">
 
                         <div class="panel-header">
@@ -267,20 +228,22 @@
 
                         </div>
 
-
                         <div class="panel-divider"></div>
-
 
                         <div class="document-content">
 
-                            <div class="document-label">INVESTIGATION NOTES</div>
+                            <div class="document-label">
+                                INVESTIGATION NOTES
+                            </div>
 
                             <textarea
                                 id="case-document"
                                 class="document-textarea"
                                 placeholder="Begin documenting your investigation findings here...
 
-Record observations, evidence descriptions, relevant details and investigative notes."
+Record observations, evidence descriptions, relevant details and investigative notes.
+
+Imported document text and AI-generated video transcripts will appear here."
                             ></textarea>
 
                             <div class="document-footer">
@@ -301,7 +264,6 @@ Record observations, evidence descriptions, relevant details and investigative n
 
 
                     <!-- CASE IMAGES -->
-
                     <section class="evidence-panel images-panel">
 
                         <div class="panel-header">
@@ -323,38 +285,39 @@ Record observations, evidence descriptions, relevant details and investigative n
 
                         </div>
 
-
                         <div class="panel-divider"></div>
 
 
+                        <!-- ORIGINAL SIX IMAGE PLACEHOLDERS -->
+
                         <div class="image-gallery" id="image-gallery">
 
-                            <div class="image-placeholder">
+                            <div class="image-placeholder" data-slot="1">
                                 <i data-lucide="image"></i>
                                 <span>IMAGE 01</span>
                             </div>
 
-                            <div class="image-placeholder">
+                            <div class="image-placeholder" data-slot="2">
                                 <i data-lucide="image"></i>
                                 <span>IMAGE 02</span>
                             </div>
 
-                            <div class="image-placeholder">
+                            <div class="image-placeholder" data-slot="3">
                                 <i data-lucide="image"></i>
                                 <span>IMAGE 03</span>
                             </div>
 
-                            <div class="image-placeholder">
+                            <div class="image-placeholder" data-slot="4">
                                 <i data-lucide="image"></i>
                                 <span>IMAGE 04</span>
                             </div>
 
-                            <div class="image-placeholder">
+                            <div class="image-placeholder" data-slot="5">
                                 <i data-lucide="image"></i>
                                 <span>IMAGE 05</span>
                             </div>
 
-                            <div class="image-placeholder">
+                            <div class="image-placeholder" data-slot="6">
                                 <i data-lucide="image"></i>
                                 <span>IMAGE 06</span>
                             </div>
@@ -384,7 +347,9 @@ Record observations, evidence descriptions, relevant details and investigative n
 
 
 <style>
+
 /* FORENSIC DIVIDER */
+
 .forensic-divider {
     position: relative;
     width: 0;
@@ -419,7 +384,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     100% { left: 100%; opacity: 0; }
 }
 
+
 /* SIDEBAR ICONS */
+
 .nav-icon {
     width: 19px;
     height: 19px;
@@ -435,7 +402,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     color: var(--gold);
 }
 
+
 /* LIVE INDICATOR */
+
 .live-indicator {
     width: 7px;
     height: 7px;
@@ -453,6 +422,7 @@ Record observations, evidence descriptions, relevant details and investigative n
         box-shadow: 0 0 5px rgba(255, 48, 48, 0.7);
         transform: scale(1);
     }
+
     50% {
         opacity: 0.45;
         box-shadow: 0 0 12px rgba(255, 48, 48, 1);
@@ -460,7 +430,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     }
 }
 
+
 /* MAIN WORKSPACE */
+
 .content-wrapper {
     width: 100%;
     max-width: 1800px;
@@ -480,7 +452,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     min-height: 0;
 }
 
+
 /* PAGE HEADING */
+
 .evidence-heading {
     margin-bottom: 28px;
     flex-shrink: 0;
@@ -505,7 +479,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     line-height: 1.1;
 }
 
+
 /* TYPING CURSOR */
+
 .typing-cursor {
     display: inline-block;
     width: 3px;
@@ -520,7 +496,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     50% { opacity: 0; }
 }
 
+
 /* EVIDENCE GRID */
+
 .evidence-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -529,7 +507,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     min-height: 520px;
 }
 
+
 /* EVIDENCE PANELS */
+
 .evidence-panel {
     position: relative;
     display: flex;
@@ -548,7 +528,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     border-color: var(--bronze-light);
 }
 
+
 /* PANEL HEADER */
+
 .panel-header {
     display: flex;
     align-items: center;
@@ -608,7 +590,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     opacity: 0.75;
 }
 
+
 /* PANEL DIVIDER */
+
 .panel-divider {
     width: 100%;
     height: 1px;
@@ -616,7 +600,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     background: var(--border-subtle);
 }
 
+
 /* DOCUMENT CONTENT */
+
 .document-content {
     display: flex;
     flex-direction: column;
@@ -675,7 +661,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     border-radius: 5px;
 }
 
+
 /* DOCUMENT FOOTER */
+
 .document-footer {
     display: flex;
     align-items: center;
@@ -700,7 +688,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     color: var(--bronze-light);
 }
 
+
 /* IMAGE GALLERY */
+
 .image-gallery {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -711,7 +701,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     overflow-y: auto;
 }
 
+
 /* IMAGE PLACEHOLDERS */
+
 .image-placeholder {
     position: relative;
     display: flex;
@@ -749,7 +741,43 @@ Record observations, evidence descriptions, relevant details and investigative n
     opacity: 0.8;
 }
 
+
+/* IMPORTED IMAGES INSIDE ORIGINAL SLOTS */
+
+.image-placeholder {
+    overflow: hidden;
+}
+
+.image-placeholder .evidence-slot-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #050505;
+}
+
+.image-placeholder .evidence-slot-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: block;
+    padding: 9px 7px;
+    color: var(--gold);
+    background: rgba(0,0,0,0.88);
+    font: 9px "DM Mono", monospace;
+    letter-spacing: .7px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
 /* IMAGES FOOTER */
+
 .images-footer {
     display: flex;
     align-items: center;
@@ -769,7 +797,9 @@ Record observations, evidence descriptions, relevant details and investigative n
     color: var(--bronze-light);
 }
 
-/* DOCUMENT IMPORT CONTROL */
+
+/* EVIDENCE UPLOAD CONTROL */
+
 .evidence-upload {
     position: relative;
     display: flex;
@@ -876,37 +906,11 @@ Record observations, evidence descriptions, relevant details and investigative n
     color: #9caf83;
 }
 
-/* IMPORTED IMAGE CARDS */
-.image-evidence-card {
-    position: relative;
-    overflow: hidden;
-    min-width: 0;
-    background: #050505;
-    border: 1px solid var(--border-subtle);
-    border-radius: 4px;
-}
-
-.image-evidence-card img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: contain;
-    background: #080808;
-}
-
-.image-evidence-card span {
-    display: block;
-    overflow: hidden;
-    padding: 9px 10px;
-    color: var(--bronze-light);
-    font: 9px "DM Mono", monospace;
-    letter-spacing: .7px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
 /* RESPONSIVE TABLET */
+
 @media (max-width: 1100px) {
+
     .content-wrapper {
         padding: 40px 25px 30px;
     }
@@ -927,10 +931,14 @@ Record observations, evidence descriptions, relevant details and investigative n
         padding: 18px;
         gap: 12px;
     }
+
 }
 
+
 /* RESPONSIVE MOBILE */
+
 @media (max-width: 750px) {
+
     .content-wrapper {
         padding: 35px 18px 25px;
     }
@@ -969,15 +977,20 @@ Record observations, evidence descriptions, relevant details and investigative n
     .upload-actions {
         width: 100%;
         justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .upload-status {
         margin-top: 2px;
     }
+
 }
 
+
 /* SMALL MOBILE */
+
 @media (max-width: 400px) {
+
     .panel-header {
         padding: 16px;
     }
@@ -1008,10 +1021,14 @@ Record observations, evidence descriptions, relevant details and investigative n
         gap: 10px;
         padding: 15px;
     }
+
 }
 
+
 /* REDUCED MOTION */
+
 @media (prefers-reduced-motion: reduce) {
+
     .live-indicator,
     .forensic-divider,
     .forensic-divider::after,
@@ -1023,7 +1040,9 @@ Record observations, evidence descriptions, relevant details and investigative n
         width: 180px;
         opacity: 1;
     }
+
 }
+
 </style>
 
 
@@ -1035,39 +1054,57 @@ Record observations, evidence descriptions, relevant details and investigative n
 
 <!-- TYPING EFFECT -->
 <script>
+
     const title = "EVIDENCE";
+
     const typingElement = document.getElementById("typing-title");
+
     let characterIndex = 0;
 
     function typeTitle() {
+
         if (characterIndex < title.length) {
+
             typingElement.textContent += title.charAt(characterIndex);
+
             characterIndex++;
+
             setTimeout(typeTitle, 120);
+
         }
+
     }
 
     window.addEventListener("load", () => {
         setTimeout(typeTitle, 500);
     });
+
 </script>
 
 
 <!-- DOCUMENT WORD COUNT -->
 <script>
+
     const documentInput = document.getElementById("case-document");
+
     const wordCount = document.getElementById("word-count");
 
     documentInput.addEventListener("input", () => {
+
         const text = documentInput.value.trim();
+
         const words = text ? text.split(/\s+/).length : 0;
+
         wordCount.textContent = `${words} WORDS`;
+
     });
+
 </script>
 
 
 <!-- FIREBASE AUTHENTICATION -->
 <script type="module">
+
     import {
         auth,
         onAuthStateChanged,
@@ -1075,35 +1112,55 @@ Record observations, evidence descriptions, relevant details and investigative n
     } from "./firebase.js";
 
     onAuthStateChanged(auth, (user) => {
+
         if (!user) {
             window.location.replace("login.html");
         } else {
             console.log("FORENZA: Evidence workspace authenticated.");
         }
+
     });
 
     const logoutLink = document.querySelector(".logout-link");
 
     if (logoutLink) {
+
         logoutLink.addEventListener("click", async (event) => {
+
             event.preventDefault();
 
             try {
+
                 await signOut(auth);
+
                 window.location.replace("login.html");
+
             } catch (error) {
+
                 console.error("FORENZA sign-out error:", error);
+
                 alert("Unable to sign out. Please try again.");
+
             }
+
         });
+
     }
+
 </script>
 
 
 <!-- DOCUMENT PARSING LIBRARIES -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+
+<!-- FORENZA EVIDENCE PROCESSING -->
+
 <script src="./evidence.js"></script>
 
 </body>
